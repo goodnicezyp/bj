@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xkygame.ssm.dao.FollowerDao">
+
+    <resultMap id="FollowerBaseMap" type="com.xkygame.ssm.model.Follower" autoMapping="true">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="createTime" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <resultMap id="FollowerDtoMap" type="com.xkygame.ssm.dto.FollowerDto" autoMapping="true">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="createTime" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <insert id="create" parameterType="com.xkygame.ssm.model.Follower" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO follower(careUserid,careUserName,careUserImg,fansUserid,fansUserName,fansUserImg,
+        type,createTime,update_by,updateTime)
+        VALUES (#{careUserid},#{careUserName},#{careUserImg},#{fansUserid},#{fansUserName},#{fansUserImg},
+        #{type},#{createTime},#{update_by},#{updateTime})
+    </insert>
+
+    <update id="update" parameterType="com.xkygame.ssm.model.Follower">
+        UPDATE follower SET careUserid=#{careUserid},careUserName=#{careUserName},careUserImg=#{careUserImg},
+        fansUserid=#{fansUserid},fansUserName=#{fansUserName},fansUserImg=#{fansUserImg},type=#{type},
+        createTime=#{createTime},update_by=#{update_by},
+        updateTime=#{updateTime} where id =#{id}
+    </update>
+
+    <select id="findFollower" resultMap="FollowerBaseMap">
+        SELECT * FROM follower WHERE
+        (fansUserid = #{fansUserid} and careUserid =#{careUserid}) or (fansUserid = #{careUserid} and careUserid =#{fansUserid})
+    </select>
+
+    <select id="findUserCares" resultMap="FollowerDtoMap">
+        SELECT * FROM follower WHERE (fansUserid = #{userid} and type > 0) OR (careUserid = #{userid} AND type = 2) order by createTime DESC
+        limit #{pageNo},#{pageSize}
+    </select>
+
+    <select id="findUserFans" resultMap="FollowerDtoMap">
+        SELECT * FROM follower WHERE (careUserid = #{userid} and type > 0) OR (fansUserid = #{userid} AND type = 2) order by createTime DESC
+        limit #{pageNo},#{pageSize}
+    </select>
+
+    <select id="findAll" resultMap="FollowerBaseMap">
+        SELECT * FROM follower where (fansUserid = #{userid} or careUserid = #{userid}) and type > 0
+  </select>
+
+</mapper>

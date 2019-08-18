@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xkygame.ssm.dao.InterestUserDao">
+    <!--auto generated Code-->
+    <resultMap id="BaseResultMap" type="com.xkygame.ssm.model.InterestUser">
+        <result column="id" property="id" jdbcType="BIGINT"/>
+        <result column="userid" property="userid" jdbcType="BIGINT"/>
+        <result column="interestid" property="interestid"/>
+    </resultMap>
+
+    <!--auto generated Code-->
+    <sql id="Base_Column_List">
+        id,
+        userid,
+        interestid
+    </sql>
+
+    <!--auto generated Code-->
+    <insert id="insert" useGeneratedKeys="true" keyProperty="interestUser.id">
+        INSERT INTO interestuser (
+            id,
+            userid,
+            interestid
+        ) VALUES (
+            #{interestUser.id},
+            #{interestUser.userid},
+            #{interestUser.interestid}
+        )
+	</insert>
+
+    <!--auto generated Code-->
+    <insert id="insertSelective" useGeneratedKeys="true" keyProperty="interestUser.id">
+        INSERT INTO interestuser
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="interestUser.id!=null"> id,</if>
+            <if test="interestUser.userid!=null"> userid,</if>
+            <if test="interestUser.interestid!=null"> interestid</if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="interestUser.id!=null"> #{interestUser.id},</if>
+            <if test="interestUser.userid!=null"> #{interestUser.userid},</if>
+            <if test="interestUser.interestid!=null"> #{interestUser.interestid}</if>
+        </trim>
+	</insert>
+
+    <!--auto generated Code-->
+    <insert id="insertList">        INSERT INTO interestuser(
+        <include refid="Base_Column_List"/>
+        )VALUES
+        <foreach collection="interestUsers" item="interestUser" index="index" separator=",">
+            (
+            #{interestUser.id},
+            #{interestUser.userid},
+            #{interestUser.interestid}
+            )
+        </foreach>
+	</insert>
+
+    <!--auto generated Code-->
+    <update id="update">
+        UPDATE interestuser
+        <set>
+            <if test="interestUser.id != null"> id = #{interestUser.id},</if>
+            <if test="interestUser.userid != null"> userid = #{interestUser.userid},</if>
+            <if test="interestUser.interestid != null"> interestid = #{interestUser.interestid}</if>
+        </set>
+		WHERE id = #{interestUser.id,jdbcType=BIGINT}
+    </update>
+
+    <insert id="batchInsert" parameterType="Collection">
+        <foreach collection="idArr" item="item">
+            INSERT INTO interestuser(userid,interestid) VALUES (#{id},#{item});
+        </foreach>
+    </insert>
+
+    <select id="findByID" resultType="com.xkygame.ssm.model.InterestUser">
+        select * from interestuser where interestid=#{id} and userid=#{userid}
+    </select>
+
+    <delete id="batchDel">
+        delete from interestuser where userid=#{userid}
+    </delete>
+</mapper>
+

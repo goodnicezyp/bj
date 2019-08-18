@@ -1,0 +1,2 @@
+ALTER TABLE appointment
+	ADD workid BIGINT(11) NOT NULL DEFAULT 0 COMMENT 'workid';

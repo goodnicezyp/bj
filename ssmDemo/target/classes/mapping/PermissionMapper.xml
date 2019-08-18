@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xkygame.ssm.dao.PermissionDao">
+
+    <resultMap id="PermissionBaseMap" type="com.xkygame.ssm.model.Permission" autoMapping="true">
+        <id column="pid" property="pid" jdbcType="BIGINT"/>
+    </resultMap>
+
+    <resultMap id="PermissDtoMap" type="com.xkygame.ssm.dto.PermissDto" autoMapping="true">
+        <id column="pid" property="pid" jdbcType="BIGINT"/>
+        <collection property="permissionList" ofType="com.xkygame.ssm.dto.Permiss2Dto" autoMapping="true">
+            <id column="pid_2" property="pid_2" jdbcType="BIGINT"/>
+            <collection property="permissionList2" ofType="com.xkygame.ssm.dto.Permiss3Dto" autoMapping="true">
+                <id column="pid_3" property="pid_3" jdbcType="BIGINT"/>
+            </collection>
+        </collection>
+    </resultMap>
+
+
+    <insert id="create" parameterType="com.xkygame.ssm.model.Permission" useGeneratedKeys="true" keyProperty="pid">
+        INSERT INTO permission(name,action,depth,parentID,parentName) VALUES (#{name},#{action},#{depth},#{parentID},#{parentName})
+    </insert>
+
+    <update id="update" parameterType="com.xkygame.ssm.model.Permission">
+        UPDATE permission SET name=#{name},action=#{action},depth=#{depth},parentID=#{parentID},parentName=#{parentName} WHERE pid = #{pid}
+    </update>
+
+    <select id="selectByAction" resultMap="PermissionBaseMap">
+        SELECT * FROM permission where action = #{action}
+    </select>
+
+    <select id="findByPage" resultMap="PermissionBaseMap">
+        SELECT * FROM permission
+        <where>
+            <if test="map.searchVal != null and map.searchVal != ''">LOWER (name) like LOWER (#{map.searchVal})</if>
+        </where>
+        ORDER BY pid DESC limit #{pageNo},#{pageSize}
+    </select>
+
+    <select id="total" resultType="java.lang.Integer">
+        SELECT count(1) FROM (
+            SELECT * FROM permission
+            <where>
+                <if test="map.searchVal != null and map.searchVal != ''">LOWER (name) like LOWER (#{map.searchVal})</if>
+            </where>
+        )t
+    </select>
+
+    <select id="findByID" resultType="com.xkygame.ssm.model.Permission">
+      SELECT * FROM permission WHERE pid=#{id}
+    </select>
+
+    <delete id="delPermissionByIds">
+      DELETE FROM permission WHERE pid IN
+      <foreach collection="idArr" item="item" open="(" separator="," close=")">
+          #{item}
+      </foreach>
+    </delete>
+
+    <select id="findAll" resultType="com.xkygame.ssm.model.Permission">
+      SELECT * FROM permission ORDER BY pid DESC
+    </select>
+
+    <select id="findAllGroup" resultMap="PermissDtoMap">
+        SELECT p.pid as pid,p.`name` as pname,p.action as paction,p1.pid as pid_2,p1.`name` as pname_2,
+        p1.action as paction_2,p2.pid as pid_3,p2.`name` as pname_3,p2.action as paction_3
+        from permission p left join permission p1 on p.pid = p1.parentID left join permission p2
+         on p1.pid=p2.parentID WHERE p.depth = 1 ORDER BY p.pid ASC
+    </select>
+
+
+</mapper>

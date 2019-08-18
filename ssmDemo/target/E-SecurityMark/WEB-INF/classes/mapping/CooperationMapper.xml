@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xkygame.ssm.dao.CooperationDao">
+    <!--auto generated Code-->
+    <resultMap id="BaseResultMap" type="com.xkygame.ssm.model.Cooperation" autoMapping="true">
+        <result column="id" property="id" jdbcType="BIGINT"/>
+        <result column="createTime" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <resultMap id="DtoResultMap" type="com.xkygame.ssm.dto.CooperationDto" autoMapping="true">
+        <result column="id" property="id" jdbcType="BIGINT"/>
+        <result column="createTime" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <!--auto generated Code-->
+    <sql id="Base_Column_List">
+        id,
+        title,
+        userid,
+        content,
+        createTime,
+        state,
+        examine,
+        updateTime,
+        update_by
+    </sql>
+
+    <!--auto generated Code-->
+    <insert id="insert" useGeneratedKeys="true" keyProperty="cooperation.id">
+        INSERT INTO cooperation (
+            id,
+            title,
+            userid,
+            content,
+            createTime,
+            state,
+            examine,
+            updateTime,
+            update_by
+        ) VALUES (
+            #{cooperation.id,jdbcType=BIGINT},
+            #{cooperation.title,jdbcType=VARCHAR},
+            #{cooperation.userid,jdbcType=BIGINT},
+            #{cooperation.content,jdbcType=VARCHAR},
+            #{cooperation.createTime,jdbcType=TIMESTAMP},
+            #{cooperation.state,jdbcType=INTEGER},
+            #{cooperation.examine,jdbcType=INTEGER},
+            #{cooperation.updateTime,jdbcType=TIMESTAMP},
+            #{cooperation.update_by,jdbcType=VARCHAR}
+        )
+    </insert>
+
+    <!--auto generated Code-->
+    <update id="update">
+        UPDATE cooperation
+        <set>
+            <if test="cooperation.id != null"> id= #{cooperation.id,jdbcType=BIGINT},</if>
+            <if test="cooperation.title != null"> title= #{cooperation.title,jdbcType=VARCHAR},</if>
+            <if test="cooperation.userid != null"> userid= #{cooperation.userid,jdbcType=BIGINT},</if>
+            <if test="cooperation.content != null"> content= #{cooperation.content,jdbcType=VARCHAR},</if>
+            <if test="cooperation.createTime != null"> createTime= #{cooperation.createTime,jdbcType=TIMESTAMP},</if>
+            <if test="cooperation.state != null"> state= #{cooperation.state,jdbcType=INTEGER},</if>
+            <if test="cooperation.examine != null"> examine= #{cooperation.examine,jdbcType=INTEGER},</if>
+            <if test="cooperation.updateTime != null"> updateTime= #{cooperation.updateTime,jdbcType=TIMESTAMP},</if>
+            <if test="cooperation.update_by != null"> update_by= #{cooperation.update_by,jdbcType=VARCHAR}</if>
+        </set>
+        WHERE id = #{cooperation.id,jdbcType=BIGINT}
+    </update>
+
+    <select id="findByPage" resultMap="DtoResultMap">
+        SELECT c.*,w.realName,w.userName,w.userImg
+        FROM cooperation c LEFT JOIN wxuser w on c.userid=w.id
+         WHERE c.state = 1 and c.examine = 1
+        ORDER BY c.createTime DESC
+        limit #{pageNo},#{pageSize}
+    </select>
+
+    <select id="findAllByPage" resultMap="DtoResultMap">
+        SELECT c.*,w.realName,w.userName,w.userImg FROM cooperation c LEFT JOIN wxuser w on c.userid=w.id
+        <where>
+            c.state=1
+            <if test="map != null and map.searchVal != null and map.searchVal != ''"> AND LOWER (concat(userName,title)) LIKE LOWER (#{map.searchVal})</if>
+            <if test="map == null">AND c.examine = 1</if>
+        </where>
+        ORDER BY c.id DESC
+        limit #{pageNo},#{pageSize}
+    </select>
+
+    <select id="total" resultType="java.lang.Integer">
+        SELECT count(1) FROM cooperation c LEFT JOIN wxuser w on c.userid=w.id
+        <where>
+            c.state=1
+            <if test="map != null and map.searchVal != null and map.searchVal != ''"> AND LOWER (concat(userName,title)) LIKE LOWER (#{map.searchVal})</if>
+        </where>
+    </select>
+
+    <select id="findByID" resultType="com.xkygame.ssm.model.Cooperation">
+        SELECT * from cooperation WHERE id=#{id}
+    </select>
+    <update id="updateState">
+        UPDATE cooperation SET state =#{state} WHERE id=#{id}
+    </update>
+
+    <update id="delByIds" parameterType="Collection">
+        UPDATE cooperation SET state = 0 WHERE id IN
+        <foreach collection="idArr" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </update>
+
+    <update id="updateExamine">
+        UPDATE cooperation SET examine=#{examine},update_by=#{userName},updateTime=#{date}
+        WHERE id=#{id}
+    </update>
+    <select id="getByID" resultMap="DtoResultMap">
+        SELECT c.*,ifnull(w.realName,w.company),w.userName,w.userImg FROM cooperation c LEFT JOIN wxuser w on c.userid=w.id
+        WHERE c.id=#{id}
+    </select>
+</mapper>
+

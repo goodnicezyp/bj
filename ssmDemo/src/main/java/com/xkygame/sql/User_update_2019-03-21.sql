@@ -1,0 +1,50 @@
+ALTER TABLE wxuser
+	ADD userName VARCHAR(100) NOT NULL DEFAULT '' COMMENT 'userName';ALTER TABLE wxuser
+	ADD userImg VARCHAR(200) NOT NULL DEFAULT '' COMMENT 'userImg';ALTER TABLE wxuser
+	ADD lastIP VARCHAR(100) NOT NULL DEFAULT '' COMMENT 'lastIP';ALTER TABLE wxuser
+	ADD signCode VARCHAR(50) DEFAULT '' COMMENT 'signCode';ALTER TABLE wxuser
+	ADD iuserid BIGINT(11) NOT NULL DEFAULT 0 COMMENT 'iuserid';ALTER TABLE wxuser
+	ADD memberid INT(11) NOT NULL DEFAULT 0 COMMENT 'memberid';ALTER TABLE wxuser
+	ADD inviteCode VARCHAR(50) DEFAULT '' COMMENT 'inviteCode';ALTER TABLE wxuser
+	ADD parentid BIGINT(11) NOT NULL DEFAULT 0 COMMENT 'parentid';ALTER TABLE wxuser
+	ADD magnumOpus VARCHAR(200) DEFAULT '' COMMENT 'magnumOpus';ALTER TABLE wxuser
+	ADD channelFlag INT(2) NOT NULL DEFAULT 0 COMMENT 'channelFlag';ALTER TABLE wxuser
+	ADD score INT(11) NOT NULL DEFAULT 0 COMMENT 'score';ALTER TABLE wxuser
+	ADD profit DECIMAL(11,2) NOT NULL DEFAULT 0 COMMENT 'profit';ALTER TABLE wxuser
+	ADD miniOpenid VARCHAR(100) NOT NULL DEFAULT '' COMMENT 'miniOpenid';ALTER TABLE wxuser
+	ADD userOpenid VARCHAR(100) DEFAULT '' COMMENT 'userOpenid';ALTER TABLE wxuser
+	ADD unionid VARCHAR(100) NOT NULL DEFAULT '' COMMENT 'unionid';ALTER TABLE wxuser
+	ADD totalCare INT(11) NOT NULL DEFAULT 0 COMMENT 'totalCare';ALTER TABLE wxuser
+	ADD totalFans INT(11) NOT NULL DEFAULT 0 COMMENT 'totalFans';ALTER TABLE wxuser
+	ADD recommendFlag INT(11) NOT NULL DEFAULT 0 COMMENT 'recommendFlag';ALTER TABLE wxuser
+	ADD works INT(11) NOT NULL DEFAULT 0 COMMENT 'works';ALTER TABLE wxuser
+	ADD state INT(2) NOT NULL DEFAULT 0 COMMENT 'state';ALTER TABLE wxuser
+	ADD freeTime INT(5) NOT NULL DEFAULT 0 COMMENT 'freeTime';ALTER TABLE wxuser
+	ADD signType INT(2) NOT NULL DEFAULT 0 COMMENT 'signType';ALTER TABLE wxuser
+	ADD professional VARCHAR(200) DEFAULT '' COMMENT 'professional';ALTER TABLE wxuser
+	ADD integererest VARCHAR(200) DEFAULT '' COMMENT 'Integererest';ALTER TABLE wxuser
+	ADD userPhone VARCHAR(50) DEFAULT '' COMMENT 'userPhone';ALTER TABLE wxuser
+	ADD email VARCHAR(50) DEFAULT '' COMMENT 'email';ALTER TABLE wxuser
+	ADD company VARCHAR(100) DEFAULT '' COMMENT 'company';ALTER TABLE wxuser
+	ADD remark VARCHAR(50) DEFAULT '' COMMENT 'remark';ALTER TABLE wxuser
+	ADD sex INT(2) NOT NULL DEFAULT 0 COMMENT 'sex';ALTER TABLE wxuser
+	ADD certifiedFlag INT(2) NOT NULL DEFAULT 0 COMMENT 'certifiedFlag';ALTER TABLE wxuser
+	ADD cardType INT(11) NOT NULL DEFAULT 0 COMMENT 'cardType';ALTER TABLE wxuser
+	ADD cardNo VARCHAR(50) DEFAULT '' COMMENT 'cardNo';ALTER TABLE wxuser
+	ADD realName VARCHAR(50) DEFAULT '' COMMENT 'realName';ALTER TABLE wxuser
+	ADD country VARCHAR(50) DEFAULT '' COMMENT 'country';ALTER TABLE wxuser
+	ADD province VARCHAR(50) DEFAULT '' COMMENT 'province';ALTER TABLE wxuser
+	ADD city VARCHAR(50) DEFAULT '' COMMENT 'city';ALTER TABLE wxuser
+	ADD cardFrontPic VARCHAR(200) DEFAULT '' COMMENT 'cardFrontPic';ALTER TABLE wxuser
+	ADD cardBackPic VARCHAR(200) DEFAULT '' COMMENT 'cardBackPic';ALTER TABLE wxuser
+	ADD cardHandPic VARCHAR(200) DEFAULT '' COMMENT 'cardHandPic';ALTER TABLE wxuser
+	ADD certifiedState INT(2) DEFAULT 0 COMMENT 'certifiedState';ALTER TABLE wxuser
+	ADD certifiedUpdate_by VARCHAR(50) DEFAULT '' COMMENT 'certifiedUpdate_by';ALTER TABLE wxuser
+	ADD aptitudeFlag INT(2) NOT NULL DEFAULT 0 COMMENT 'aptitudeFlag';ALTER TABLE wxuser
+	ADD educational VARCHAR(50) DEFAULT '' COMMENT 'educational';ALTER TABLE wxuser
+	ADD industry VARCHAR(50) DEFAULT '' COMMENT 'industry';ALTER TABLE wxuser
+	ADD workDes TEXT(0) COMMENT 'workDes';ALTER TABLE wxuser
+	ADD winDes VARCHAR(200) DEFAULT '' COMMENT 'winDes';ALTER TABLE wxuser
+	ADD aptitudePic VARCHAR(200) DEFAULT '' COMMENT 'aptitudePic';ALTER TABLE wxuser
+	ADD aptitudeState INT(2) NOT NULL DEFAULT 0 COMMENT 'aptitudeState';ALTER TABLE wxuser
+	ADD aptitudeUpdate_by VARCHAR(50) DEFAULT '' COMMENT 'aptitudeUpdate_by';

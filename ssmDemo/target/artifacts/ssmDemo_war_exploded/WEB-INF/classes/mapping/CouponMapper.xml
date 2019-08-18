@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xkygame.ssm.dao.CouponDao">
+    <!--auto generated Code-->
+    <resultMap id="BaseResultMap" type="com.xkygame.ssm.model.Coupon">
+        <result column="id" property="id" jdbcType="BIGINT"/>
+        <result column="title" property="title" jdbcType="VARCHAR"/>
+        <result column="price" property="price" jdbcType="DECIMAL"/>
+        <result column="type" property="type" jdbcType="INTEGER"/>
+        <result column="create_time" property="create_time" jdbcType="TIMESTAMP"/>
+        <result column="date_flag" property="date_flag" jdbcType="INTEGER"/>
+        <result column="start_time" property="start_time" jdbcType="TIMESTAMP"/>
+        <result column="end_time" property="end_time" jdbcType="TIMESTAMP"/>
+        <result column="day_num" property="day_num" jdbcType="INTEGER"/>
+        <result column="state" property="state" jdbcType="INTEGER"/>
+        <result column="authority" property="authority"/>
+        <result column="user_num" property="user_num"/>
+    </resultMap>
+
+    <!--auto generated Code-->
+    <sql id="Base_Column_List">
+        id,
+        title,
+        price,
+        type,
+        create_time,
+        date_flag,
+        start_time,
+        end_time,
+        day_num,
+        state,
+        authority,
+        user_num
+    </sql>
+
+    <!--auto generated Code-->
+    <insert id="insert" useGeneratedKeys="true" keyProperty="coupon.id">
+        INSERT INTO coupon (
+            id,
+            title,
+            price,
+            type,
+            create_time,
+            date_flag,
+            start_time,
+            end_time,
+            day_num,
+            state,
+            authority,
+            user_num
+        ) VALUES (
+            #{coupon.id},
+            #{coupon.title},
+            #{coupon.price},
+            #{coupon.type},
+            #{coupon.create_time},
+            #{coupon.date_flag},
+            #{coupon.start_time},
+            #{coupon.end_time},
+            #{coupon.day_num},
+            #{coupon.state},
+            #{coupon.authority},
+            #{coupon.user_num}
+        )
+	</insert>
+
+    <!--auto generated Code-->
+    <insert id="insertSelective" useGeneratedKeys="true" keyProperty="coupon.id">
+        INSERT INTO coupon
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="coupon.id!=null"> id,</if>
+            <if test="coupon.title!=null"> title,</if>
+            <if test="coupon.price!=null"> price,</if>
+            <if test="coupon.type!=null"> type,</if>
+            <if test="coupon.create_time!=null"> create_time,</if>
+            <if test="coupon.date_flag!=null"> date_flag,</if>
+            <if test="coupon.start_time!=null"> start_time,</if>
+            <if test="coupon.end_time!=null"> end_time,</if>
+            <if test="coupon.day_num!=null"> day_num,</if>
+            <if test="coupon.state!=null"> state,</if>
+            <if test="coupon.authority!=null"> authority,</if>
+            <if test="coupon.user_num!=null"> user_num</if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="coupon.id!=null"> #{coupon.id},</if>
+            <if test="coupon.title!=null"> #{coupon.title},</if>
+            <if test="coupon.price!=null"> #{coupon.price},</if>
+            <if test="coupon.type!=null"> #{coupon.type},</if>
+            <if test="coupon.create_time!=null"> #{coupon.create_time},</if>
+            <if test="coupon.date_flag!=null"> #{coupon.date_flag},</if>
+            <if test="coupon.start_time!=null"> #{coupon.tart_time},</if>
+            <if test="coupon.end_time!=null"> #{coupon.end_time},</if>
+            <if test="coupon.day_num!=null"> #{coupon.day_num},</if>
+            <if test="coupon.state!=null"> #{coupon.state},</if>
+            <if test="coupon.authority!=null"> #{coupon.authority},</if>
+            <if test="coupon.user_num!=null"> #{coupon.user_num}</if>
+        </trim>
+	</insert>
+
+    <!--auto generated Code-->
+    <insert id="insertList">        INSERT INTO coupon(
+        <include refid="Base_Column_List"/>
+        )VALUES
+        <foreach collection="coupons" item="coupon" index="index" separator=",">
+            (
+            #{coupon.id},
+            #{coupon.title},
+            #{coupon.price},
+            #{coupon.type}
+            )
+        </foreach>
+	</insert>
+
+    <!--auto generated Code-->
+    <update id="update">
+        UPDATE coupon
+        <set>
+            <if test="coupon.id != null"> id = #{coupon.id},</if>
+            <if test="coupon.title != null"> title = #{coupon.title},</if>
+            <if test="coupon.price != null"> price = #{coupon.price},</if>
+            <if test="coupon.type!=null"> type = #{coupon.type},</if>
+            <if test="coupon.create_time!=null"> create_time = #{coupon.create_time},</if>
+            <if test="coupon.date_flag!=null"> date_flag = #{coupon.date_flag},</if>
+            start_time = #{coupon.start_time},
+            end_time = #{coupon.end_time},
+            day_num = #{coupon.day_num},
+            <if test="coupon.state!=null"> state = #{coupon.state},</if>
+            <if test="coupon.authority!=null"> authority = #{coupon.authority},</if>
+            <if test="coupon.user_num!=null"> user_num = #{coupon.user_num}</if>
+        </set>
+		WHERE id = #{coupon.id,jdbcType=BIGINT}
+    </update>
+
+    <select id="findMemberCoupon" resultMap="BaseResultMap">
+        SELECT * FROM coupon WHERE authority = 1 AND state = 1 limit 1
+    </select>
+    <select id="total" resultType="java.lang.Integer">
+      SELECT count(1) from coupon
+    </select>
+    <select id="findAllByPage" resultMap="BaseResultMap">
+        SELECT * FROM coupon ORDER BY id DESC limit #{pageNo},#{pageSize}
+    </select>
+    <delete id="delCoupon" parameterType="Collection">
+        DELETE FROM coupon WHERE id IN
+        <foreach collection="idArr" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+    <select id="findByID" resultMap="BaseResultMap">
+        SELECT * FROM coupon WHERE id=#{id}
+    </select>
+    <update id="updateState">
+        UPDATE coupon SET state =#{state} WHERE id=#{id}
+    </update>
+    <update id="addUserNum" >
+        UPDATE coupon SET user_num = user_num + #{num} WHERE id=#{id}
+    </update>
+</mapper>
+

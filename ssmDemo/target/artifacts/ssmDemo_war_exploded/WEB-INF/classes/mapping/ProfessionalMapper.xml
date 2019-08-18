@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xkygame.ssm.dao.ProfessionalDao">
+    <!--auto generated Code-->
+    <resultMap id="BaseResultMap" type="com.xkygame.ssm.model.Professional">
+        <result column="id" property="id" jdbcType="BIGINT"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="parentid" property="parentid" jdbcType="BIGINT"/>
+        <result column="parentName" property="parentName" jdbcType="VARCHAR"/>
+        <result column="depth" property="depth" jdbcType="INTEGER"/>
+        <result column="state" property="state" jdbcType="INTEGER"/>
+    </resultMap>
+    <resultMap id="DtoResultMap" type="com.xkygame.ssm.dto.ProfessionalDto" autoMapping="true">
+        <result column="id" property="id" jdbcType="BIGINT" />
+        <collection property="professionalDtoList" ofType="com.xkygame.ssm.dto.ProfessionalDto">
+            <result column="pid" property="id" jdbcType="BIGINT" />
+            <result column="pname" property="name" jdbcType="VARCHAR"/>
+            <result column="plikeState" property="likeState" jdbcType="INTEGER"/>
+            <result column="pdepth" property="depth" jdbcType="INTEGER"/>
+        </collection>
+    </resultMap>
+
+    <!--auto generated Code-->
+    <sql id="Base_Column_List">
+        id,
+        name,
+        parentid,
+        parentName,
+        depth,
+        state
+    </sql>
+
+    <!--auto generated Code-->
+    <insert id="insert" useGeneratedKeys="true" keyProperty="professional.id">
+        INSERT INTO professional (
+            id,
+            name,
+            parentid,
+            parentName,
+            depth,
+            state
+        ) VALUES (
+            #{professional.id,jdbcType=BIGINT},
+            #{professional.name,jdbcType=VARCHAR},
+            #{professional.parentid,jdbcType=BIGINT},
+            #{professional.parentName,jdbcType=VARCHAR},
+            #{professional.depth,jdbcType=INTEGER},
+            #{professional.state,jdbcType=INTEGER}
+        )
+    </insert>
+
+    <!--auto generated Code-->
+    <insert id="insertSelective" useGeneratedKeys="true" keyProperty="professional.id">
+        INSERT INTO professional
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="professional.id!=null"> id,</if>
+            <if test="professional.name!=null"> name,</if>
+            <if test="professional.parentid!=null"> parentid,</if>
+            <if test="professional.parentName!=null"> parentName,</if>
+            <if test="professional.depth!=null"> depth,</if>
+            <if test="professional.state!=null"> state,</if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="professional.id!=null">#{professional.id,jdbcType=BIGINT},
+            </if>
+            <if test="professional.name!=null">#{professional.name,jdbcType=VARCHAR},
+            </if>
+            <if test="professional.parentid!=null">#{professional.parentid,jdbcType=BIGINT},
+            </if>
+            <if test="professional.parentName!=null">#{professional.parentName,jdbcType=VARCHAR},
+            </if>
+            <if test="professional.depth!=null">#{professional.depth,jdbcType=INTEGER},
+            </if>
+            <if test="professional.state!=null">#{professional.state,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+
+    <!--auto generated Code-->
+    <insert id="insertList">
+        INSERT INTO professional (
+        <include refid="Base_Column_List"/>
+        )VALUES
+        <foreach collection="professionals" item="professional" index="index" separator=",">
+            (
+            #{professional.id,jdbcType=BIGINT},
+            #{professional.name,jdbcType=VARCHAR},
+            #{professional.parentid,jdbcType=BIGINT},
+            #{professional.parentName,jdbcType=VARCHAR},
+            #{professional.depth,jdbcType=INTEGER},
+            #{professional.state,jdbcType=INTEGER}
+            )
+        </foreach>
+    </insert>
+
+    <!--auto generated Code-->
+    <update id="update">
+        UPDATE professional
+        <set>
+            <if test="professional.id != null"> id= #{professional.id,jdbcType=BIGINT},</if>
+            <if test="professional.name != null"> name= #{professional.name,jdbcType=VARCHAR},</if>
+            <if test="professional.parentid != null"> parentid= #{professional.parentid,jdbcType=BIGINT},</if>
+            <if test="professional.parentName != null"> parentName= #{professional.parentName,jdbcType=VARCHAR},</if>
+            <if test="professional.depth != null"> depth= #{professional.depth,jdbcType=INTEGER},</if>
+            <if test="professional.state != null"> state= #{professional.state,jdbcType=INTEGER}</if>
+        </set>
+        WHERE id = #{professional.id,jdbcType=BIGINT}
+    </update>
+
+    <select id="findMyProfessional" resultMap="DtoResultMap">
+        SELECT p.id,p.`name`,p.depth,p1.id as pid,p1.`name` as pname,p1.depth as pdepth ,
+        p1.parentid as pparentid,if(p2.professionid>0,1,0) as PlikeState
+        from professional p LEFT JOIN professional p1 on p.id=p1.parentid
+        left join
+        (select professionid from professionuser WHERE userid=#{id})p2
+        on p1.id=p2.professionid
+        WHERE p1.state=1 ORDER BY p.id ASC,p1.id ASC
+    </select>
+    <select id="findAll" resultType="com.xkygame.ssm.model.Professional">
+        SELECT * FROM professional WHERE state = 1 order by id DESC
+    </select>
+    <select id="findByID" resultType="com.xkygame.ssm.model.Professional">
+        SELECT * from professional WHERE id=#{id}
+    </select>
+    <update id="updateState">
+        UPDATE professional SET state =#{state} WHERE id=#{id}
+    </update>
+    <delete id="delByIds" parameterType="Collection">
+        DELETE FROM professional WHERE id IN
+        <foreach collection="idArr" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+    <select id="findByPage" resultType="com.xkygame.ssm.model.Professional">
+        SELECT * FROM professional ORDER BY id DESC limit #{pageNo},#{pageSize}
+    </select>
+    <select id="total" resultType="int">
+        SELECT count(1) FROM professional
+    </select>
+
+</mapper>
+

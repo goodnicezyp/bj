@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xkygame.ssm.dao.AppointmentDao">
+    <!--auto generated Code-->
+    <resultMap id="BaseResultMap" type="com.xkygame.ssm.model.Appointment">
+        <result column="id" property="id" jdbcType="BIGINT"/>
+        <result column="userid" property="userid" jdbcType="BIGINT"/>
+        <result column="type" property="type" jdbcType="INTEGER"/>
+        <result column="recordNo" property="recordNo" jdbcType="VARCHAR"/>
+        <result column="createTime" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP"/>
+        <result column="update_by" property="update_by" jdbcType="VARCHAR"/>
+        <result column="state" property="state" jdbcType="INTEGER"/>
+        <result column="userName" property="userName"/>
+        <result column="userPhone" property="userPhone"/>
+        <result column="realName" property="realName"/>
+        <result column="content" property="content"/>
+        <result column="workid" property="workid"/>
+    </resultMap>
+
+    <!--auto generated Code-->
+    <sql id="Base_Column_List">
+        id,
+        userid,
+        type,
+        recordNo,
+        createTime,
+        updateTime,
+        update_by,
+        state,
+        userName,
+        userPhone,
+        realName,
+        content,
+        workid
+    </sql>
+
+    <!--auto generated Code-->
+    <insert id="insert" useGeneratedKeys="true" keyProperty="appointment.id">
+        INSERT INTO appointment (
+            id,
+            userid,
+            type,
+            recordNo,
+            createTime,
+            updateTime,
+            update_by,
+            state,
+            userName,
+            userPhone,
+            realName,
+            content,
+            workid
+        ) VALUES (
+            #{appointment.id},
+            #{appointment.userid},
+            #{appointment.type},
+            #{appointment.recordNo},
+            #{appointment.createTime},
+            #{appointment.updateTime},
+            #{appointment.update_by},
+            #{appointment.state},
+            #{appointment.userName},
+            #{appointment.userPhone},
+            #{appointment.realName},
+            #{appointment.content},
+            #{appointment.workid}
+        )
+	</insert>
+
+    <!--auto generated Code-->
+    <insert id="insertSelective" useGeneratedKeys="true" keyProperty="appointment.id">
+        INSERT INTO appointment
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="appointment.id!=null"> id,</if>
+            <if test="appointment.userid!=null"> userid,</if>
+            <if test="appointment.type!=null"> type,</if>
+            <if test="appointment.recordNo!=null"> recordNo,</if>
+            <if test="appointment.createTime!=null"> createTime,</if>
+            <if test="appointment.updateTime!=null"> updateTime,</if>
+            <if test="appointment.update_by!=null"> update_by,</if>
+            <if test="appointment.state!=null"> state,</if>
+            <if test="appointment.userName!=null"> userName,</if>
+            <if test="appointment.userPhone!=null"> userPhone,</if>
+            <if test="appointment.realName!=null"> realName,</if>
+            <if test="appointment.content!=null"> content,</if>
+            <if test="appointment.workid!=null"> workid</if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="appointment.id!=null"> #{appointment.id},</if>
+            <if test="appointment.userid!=null"> #{appointment.userid},</if>
+            <if test="appointment.type!=null"> #{appointment.type},</if>
+            <if test="appointment.recordNo!=null"> #{appointment.recordNo},</if>
+            <if test="appointment.createTime!=null"> #{appointment.createTime},</if>
+            <if test="appointment.updateTime!=null"> #{appointment.updateTime},</if>
+            <if test="appointment.update_by!=null"> #{appointment.update_by},</if>
+            <if test="appointment.state!=null"> #{appointment.state},</if>
+            <if test="appointment.userName!=null"> #{appointment.userName},</if>
+            <if test="appointment.userPhone!=null"> #{appointment.userPhone},</if>
+            <if test="appointment.realName!=null"> #{appointment.realName},</if>
+            <if test="appointment.content!=null"> #{appointment.content},</if>
+            <if test="appointment.workid!=null"> #{appointment.workid}</if>
+        </trim>
+	</insert>
+
+    <!--auto generated Code-->
+    <insert id="insertList">        INSERT INTO appointment(
+        <include refid="Base_Column_List"/>
+        )VALUES
+        <foreach collection="appointments" item="appointment" index="index" separator=",">
+            (
+            #{appointment.id},
+            #{appointment.userid},
+            #{appointment.type},
+            #{appointment.recordNo},
+            #{appointment.createTime},
+            #{appointment.updateTime},
+            #{appointment.update_by},
+            #{appointment.state},
+            #{appointment.userName},
+            #{appointment.userPhone},
+            #{appointment.realName},
+            #{appointment.content},
+            #{appointment.workid}
+            )
+        </foreach>
+	</insert>
+
+    <!--auto generated Code-->
+    <update id="update">
+        UPDATE appointment
+        <set>
+            <if test="appointment.id != null"> id = #{appointment.id},</if>
+            <if test="appointment.userid != null"> userid = #{appointment.userid},</if>
+            <if test="appointment.type != null"> type = #{appointment.type},</if>
+            <if test="appointment.recordNo != null"> recordNo = #{appointment.recordNo},</if>
+            <if test="appointment.createTime != null"> createTime = #{appointment.createTime},</if>
+            <if test="appointment.updateTime != null"> updateTime = #{appointment.updateTime},</if>
+            <if test="appointment.update_by != null"> update_by = #{appointment.update_by},</if>
+            <if test="appointment.state != null"> state = #{appointment.state},</if>
+            <if test="appointment.userName != null"> userName = #{appointment.userName},</if>
+            <if test="appointment.userPhone != null"> userPhone = #{appointment.userPhone},</if>
+            <if test="appointment.realName != null"> realName = #{appointment.realName},</if>
+            <if test="appointment.content != null"> content = #{appointment.content},</if>
+            <if test="appointment.workid != null"> workid = #{appointment.workid}</if>
+        </set>
+		WHERE id = #{appointment.id,jdbcType=BIGINT}
+    </update>
+
+    <select id="getMyAppointment" resultType="com.xkygame.ssm.model.Appointment">
+        SELECT * FROM appointment WHERE userid=#{id}
+        AND type =#{type} ORDER BY id DESC limit #{pageNo},#{pageSize}
+    </select>
+    <select id="findByID" resultMap="BaseResultMap">
+      SELECT * FROM appointment WHERE id=#{id}
+    </select>
+    <select id="total" resultType="java.lang.Integer">
+        SELECT count(1) FROM appointment
+        <where>
+            <if test="map.searchVal != null and map.searchVal != ''">LOWER (concat(userName,ifnull(realName,''))) LIKE LOWER (#{map.searchVal})</if>
+        </where>
+    </select>
+    <select id="findAllByPage" resultMap="BaseResultMap">
+        SELECT * FROM appointment
+        <where>
+            <if test="map.searchVal != null and map.searchVal != ''">LOWER (concat(userName,ifnull(realName,''))) LIKE LOWER (#{map.searchVal})</if>
+        </where>
+        order BY id DESC limit #{pageNo},#{pageSize}
+    </select>
+
+    <update id="updateExamine">
+        UPDATE appointment SET state=#{examine},update_by=#{userName},updateTime=#{date} WHERE id=#{id}
+    </update>
+</mapper>
+

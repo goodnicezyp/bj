@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xkygame.ssm.dao.BaseDataDao">
+    <!--auto generated Code-->
+    <resultMap id="BaseResultMap" type="com.xkygame.ssm.model.BaseData">
+        <result column="id" property="id" jdbcType="BIGINT"/>
+        <result column="content" property="content" jdbcType="VARCHAR"/>
+        <result column="sourceType" property="sourceType" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <!--auto generated Code-->
+    <sql id="Base_Column_List">
+        id,
+        content,
+        sourceType
+    </sql>
+
+    <!--auto generated Code-->
+    <insert id="insert" useGeneratedKeys="true" keyProperty="baseData.id">
+        INSERT INTO baseData (
+            id,
+            content,
+            sourceType
+        ) VALUES (
+            #{baseData.id,jdbcType=BIGINT},
+            #{baseData.content,jdbcType=VARCHAR},
+            #{baseData.sourceType,jdbcType=INTEGER}
+        )
+    </insert>
+
+    <!--auto generated Code-->
+    <insert id="insertSelective" useGeneratedKeys="true" keyProperty="baseData.id">
+        INSERT INTO baseData
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="baseData.id!=null"> id,</if>
+            <if test="baseData.content!=null"> content,</if>
+            <if test="baseData.sourceType!=null"> sourceType,</if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="baseData.id!=null">#{baseData.id,jdbcType=BIGINT},
+            </if>
+            <if test="baseData.content!=null">#{baseData.content,jdbcType=VARCHAR},
+            </if>
+            <if test="baseData.sourceType!=null">#{baseData.sourceType,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+
+    <!--auto generated Code-->
+    <insert id="insertList">
+        INSERT INTO baseData (
+        <include refid="Base_Column_List"/>
+        )VALUES
+        <foreach collection="baseDatas" item="baseData" index="index" separator=",">
+            (
+            #{baseData.id,jdbcType=BIGINT},
+            #{baseData.content,jdbcType=VARCHAR},
+            #{baseData.sourceType,jdbcType=INTEGER}
+            )
+        </foreach>
+    </insert>
+
+    <!--auto generated Code-->
+    <update id="update">
+        UPDATE baseData
+        <set>
+            <if test="baseData.id != null"> id= #{baseData.id,jdbcType=BIGINT},</if>
+            <if test="baseData.content != null"> content= #{baseData.content,jdbcType=VARCHAR},</if>
+            <if test="baseData.sourceType != null"> sourceType= #{baseData.sourceType,jdbcType=INTEGER}</if>
+        </set>
+        WHERE id = #{baseData.id,jdbcType=BIGINT}
+    </update>
+
+    <select id="findDataByType" resultMap="BaseResultMap">
+          SELECT * FROM baseData WHERE sourceType=#{sourceType}
+    </select>
+</mapper>
+

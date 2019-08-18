@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xkygame.ssm.dao.AgreeRecordDao">
+    <!--auto generated Code-->
+    <resultMap id="BaseResultMap" type="com.xkygame.ssm.model.AgreeRecord">
+        <result column="id" property="id" jdbcType="BIGINT"/>
+        <result column="sourceType" property="sourceType" jdbcType="INTEGER"/>
+        <result column="userid" property="userid" jdbcType="BIGINT"/>
+        <result column="userName" property="userName" jdbcType="VARCHAR"/>
+        <result column="userImg" property="userImg" jdbcType="VARCHAR"/>
+        <result column="createTime" property="createTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <!--auto generated Code-->
+    <sql id="Base_Column_List">
+        id,
+        sourceType,
+        userid,
+        userName,
+        userImg,
+        createTime
+    </sql>
+
+    <!--auto generated Code-->
+    <insert id="insert" useGeneratedKeys="true" keyProperty="agreeRecord.id">
+        INSERT INTO agreeRecord (
+            id,
+            sourceType,
+            userid,
+            userName,
+            userImg,
+            createTime
+        ) VALUES (
+            #{agreeRecord.id,jdbcType=BIGINT},
+            #{agreeRecord.sourceType,jdbcType=INTEGER},
+            #{agreeRecord.userid,jdbcType=BIGINT},
+            #{agreeRecord.userName,jdbcType=VARCHAR},
+            #{agreeRecord.userImg,jdbcType=VARCHAR},
+            #{agreeRecord.createTime,jdbcType=TIMESTAMP}
+        )
+    </insert>
+
+    <!--auto generated Code-->
+    <insert id="insertSelective" useGeneratedKeys="true" keyProperty="agreeRecord.id">
+        INSERT INTO agreeRecord
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="agreeRecord.id!=null"> id,</if>
+            <if test="agreeRecord.sourceType!=null"> sourceType,</if>
+            <if test="agreeRecord.userid!=null"> userid,</if>
+            <if test="agreeRecord.userName!=null"> userName,</if>
+            <if test="agreeRecord.userImg!=null"> userImg,</if>
+            <if test="agreeRecord.createTime!=null"> createTime,</if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="agreeRecord.id!=null">#{agreeRecord.id,jdbcType=BIGINT},
+            </if>
+            <if test="agreeRecord.sourceType!=null">#{agreeRecord.sourceType,jdbcType=INTEGER},
+            </if>
+            <if test="agreeRecord.userid!=null">#{agreeRecord.userid,jdbcType=BIGINT},
+            </if>
+            <if test="agreeRecord.userName!=null">#{agreeRecord.userName,jdbcType=VARCHAR},
+            </if>
+            <if test="agreeRecord.userImg!=null">#{agreeRecord.userImg,jdbcType=VARCHAR},
+            </if>
+            <if test="agreeRecord.createTime!=null">#{agreeRecord.createTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+
+    <!--auto generated Code-->
+    <insert id="insertList">
+        INSERT INTO agreeRecord (
+        <include refid="Base_Column_List"/>
+        )VALUES
+        <foreach collection="agreeRecords" item="agreeRecord" index="index" separator=",">
+            (
+            #{agreeRecord.id,jdbcType=BIGINT},
+            #{agreeRecord.sourceType,jdbcType=INTEGER},
+            #{agreeRecord.userid,jdbcType=BIGINT},
+            #{agreeRecord.userName,jdbcType=VARCHAR},
+            #{agreeRecord.userImg,jdbcType=VARCHAR},
+            #{agreeRecord.createTime,jdbcType=TIMESTAMP}
+            )
+        </foreach>
+    </insert>
+
+    <!--auto generated Code-->
+    <update id="update">
+        UPDATE agreeRecord
+        <set>
+            <if test="agreeRecord.id != null"> id= #{agreeRecord.id,jdbcType=BIGINT},</if>
+            <if test="agreeRecord.sourceType != null"> sourceType= #{agreeRecord.sourceType,jdbcType=INTEGER},</if>
+            <if test="agreeRecord.userid != null"> userid= #{agreeRecord.userid,jdbcType=BIGINT},</if>
+            <if test="agreeRecord.userName != null"> userName= #{agreeRecord.userName,jdbcType=VARCHAR},</if>
+            <if test="agreeRecord.userImg != null"> userImg= #{agreeRecord.userImg,jdbcType=VARCHAR},</if>
+            <if test="agreeRecord.createTime != null"> createTime= #{agreeRecord.createTime,jdbcType=TIMESTAMP}</if>
+        </set>
+        WHERE id = #{agreeRecord.id,jdbcType=BIGINT}
+    </update>
+
+    <select id="findAllByPage" resultMap="BaseResultMap">
+      SELECT a.* FROM agreeRecord a LEFT JOIN wxuser w on a.userid=w.id
+      <where>
+          <if test="map.searchVal != null and map.searchVal != ''">
+              LOWER (concat(a.userName,w.userName)) LIKE LOWER (#{map.searchVal})
+          </if>
+      </where>
+        ORDER BY a.id DESC limit #{pageNo},#{pageSize}
+    </select>
+    <select id="total" resultType="java.lang.Integer">
+        SELECT count(1) FROM agreeRecord a LEFT JOIN wxuser w on a.userid=w.id
+        <where>
+            <if test="map.searchVal != null and map.searchVal != ''">
+                LOWER (concat(a.userName,w.userName)) LIKE LOWER (#{map.searchVal})
+            </if>
+        </where>
+    </select>
+</mapper>
+

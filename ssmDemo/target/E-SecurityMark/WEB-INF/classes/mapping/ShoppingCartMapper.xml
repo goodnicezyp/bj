@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xkygame.ssm.dao.ShoppingCartDao">
+    <!--auto generated Code-->
+    <resultMap id="BaseResultMap" type="com.xkygame.ssm.model.ShoppingCart">
+        <result column="id" property="id" jdbcType="BIGINT"/>
+        <result column="workid" property="workid" jdbcType="BIGINT"/>
+        <result column="userid" property="userid" jdbcType="BIGINT"/>
+    </resultMap>
+    <resultMap id="DtoResultMap" type="com.xkygame.ssm.dto.ShoppingCartDto" autoMapping="true">
+        <result column="id" property="id" jdbcType="BIGINT"/>
+    </resultMap>
+
+    <!--auto generated Code-->
+    <sql id="Base_Column_List">
+        id,
+        workid,
+        userid
+    </sql>
+
+    <!--auto generated Code-->
+    <insert id="insert" useGeneratedKeys="true" keyProperty="shoppingCart.id">
+        INSERT INTO shoppingCart (
+            id,
+            workid,
+            userid
+        ) VALUES (
+            #{shoppingCart.id,jdbcType=BIGINT},
+            #{shoppingCart.workid,jdbcType=BIGINT},
+            #{shoppingCart.userid,jdbcType=BIGINT}
+        )
+    </insert>
+
+    <!--auto generated Code-->
+    <insert id="insertSelective" useGeneratedKeys="true" keyProperty="shoppingCart.id">
+        INSERT INTO shoppingCart
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="shoppingCart.id!=null"> id,</if>
+            <if test="shoppingCart.workid!=null"> workid,</if>
+            <if test="shoppingCart.userid!=null"> userid,</if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="shoppingCart.id!=null">#{shoppingCart.id,jdbcType=BIGINT},
+            </if>
+            <if test="shoppingCart.workid!=null">#{shoppingCart.workid,jdbcType=BIGINT},
+            </if>
+            <if test="shoppingCart.userid!=null">#{shoppingCart.userid,jdbcType=BIGINT},
+            </if>
+        </trim>
+    </insert>
+
+    <!--auto generated Code-->
+    <insert id="insertList">
+        INSERT INTO shoppingCart (
+        <include refid="Base_Column_List"/>
+        )VALUES
+        <foreach collection="shoppingCarts" item="shoppingCart" index="index" separator=",">
+            (
+            #{shoppingCart.id,jdbcType=BIGINT},
+            #{shoppingCart.workid,jdbcType=BIGINT},
+            #{shoppingCart.userid,jdbcType=BIGINT}
+            )
+        </foreach>
+    </insert>
+
+    <!--auto generated Code-->
+    <update id="update">
+        UPDATE shoppingCart
+        <set>
+            <if test="shoppingCart.id != null"> id= #{shoppingCart.id,jdbcType=BIGINT},</if>
+            <if test="shoppingCart.workid != null"> workid= #{shoppingCart.workid,jdbcType=BIGINT},</if>
+            <if test="shoppingCart.userid != null"> userid= #{shoppingCart.userid,jdbcType=BIGINT}</if>
+        </set>
+        WHERE id = #{shoppingCart.id,jdbcType=BIGINT}
+    </update>
+    <delete id="delByIds">
+        DELETE FROM shoppingCart WHERE userid=#{id} AND workid IN
+        <foreach collection="idArr" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+    <select id="findMyShoppingCart" resultMap="DtoResultMap">
+      SELECT s.*,w.* FROM shoppingCart s LEFT JOIN works w on s.workid=w.id
+      WHERE s.userid=#{id}
+      ORDER BY s.id DESC limit #{pageNo},#{pageSize}
+    </select>
+    <select id="findByWorkidAndUserid" resultType="com.xkygame.ssm.model.ShoppingCart">
+        SELECT * FROM shoppingCart WHERE workid=#{workid} AND userid=#{userid}
+    </select>
+    <delete id="delByWorkid">
+        DELETE FROM shoppingCart WHERE workid=#{workid} AND userid=#{userid}
+    </delete>
+</mapper>
+

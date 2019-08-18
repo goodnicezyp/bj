@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xkygame.ssm.dao.CustomDao">
+    <!--auto generated Code-->
+    <resultMap id="BaseResultMap" type="com.xkygame.ssm.model.Custom">
+        <result column="id" property="id" jdbcType="BIGINT"/>
+        <result column="userid" property="userid" jdbcType="BIGINT"/>
+        <result column="userPhone" property="userPhone" jdbcType="VARCHAR"/>
+        <result column="userImg" property="userImg" jdbcType="VARCHAR"/>
+        <result column="state" property="state" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <!--auto generated Code-->
+    <sql id="Base_Column_List">
+        id,
+        userid,
+        userPhone,
+        userImg,
+        state
+    </sql>
+
+    <!--auto generated Code-->
+    <insert id="insert" useGeneratedKeys="true" keyProperty="custom.id">
+        INSERT INTO custom (
+            id,
+            userid,
+            userPhone,
+            userImg,
+            state
+        ) VALUES (
+            #{custom.id,jdbcType=BIGINT},
+            #{custom.userid,jdbcType=BIGINT},
+            #{custom.userPhone,jdbcType=VARCHAR},
+            #{custom.userImg,jdbcType=VARCHAR},
+            #{custom.state,jdbcType=INTEGER}
+        )
+    </insert>
+
+    <!--auto generated Code-->
+    <insert id="insertSelective" useGeneratedKeys="true" keyProperty="custom.id">
+        INSERT INTO custom
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="custom.id!=null"> id,</if>
+            <if test="custom.userid!=null"> userid,</if>
+            <if test="custom.userPhone!=null"> userPhone,</if>
+            <if test="custom.userImg!=null"> userImg,</if>
+            <if test="custom.state!=null"> state,</if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="custom.id!=null">#{custom.id,jdbcType=BIGINT},
+            </if>
+            <if test="custom.userid!=null">#{custom.userid,jdbcType=BIGINT},
+            </if>
+            <if test="custom.userPhone!=null">#{custom.userPhone,jdbcType=VARCHAR},
+            </if>
+            <if test="custom.userImg!=null">#{custom.userImg,jdbcType=VARCHAR},
+            </if>
+            <if test="custom.state!=null">#{custom.state,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+
+    <!--auto generated Code-->
+    <insert id="insertList">
+        INSERT INTO custom (
+        <include refid="Base_Column_List"/>
+        )VALUES
+        <foreach collection="customs" item="custom" index="index" separator=",">
+            (
+            #{custom.id,jdbcType=BIGINT},
+            #{custom.userid,jdbcType=BIGINT},
+            #{custom.userPhone,jdbcType=VARCHAR},
+            #{custom.userImg,jdbcType=VARCHAR},
+            #{custom.state,jdbcType=INTEGER}
+            )
+        </foreach>
+    </insert>
+
+    <!--auto generated Code-->
+    <update id="update">
+        UPDATE custom
+        <set>
+            <if test="custom.id != null"> id= #{custom.id,jdbcType=BIGINT},</if>
+            <if test="custom.userid != null"> userid= #{custom.userid,jdbcType=BIGINT},</if>
+            <if test="custom.userPhone != null"> userPhone= #{custom.userPhone,jdbcType=VARCHAR},</if>
+            <if test="custom.userImg != null"> userImg= #{custom.userImg,jdbcType=VARCHAR},</if>
+            <if test="custom.state != null"> state= #{custom.state,jdbcType=INTEGER}</if>
+        </set>
+        WHERE id = #{custom.id,jdbcType=BIGINT}
+    </update>
+
+    <select id="findByPage" resultType="com.xkygame.ssm.model.Custom">
+        SELECT * FROM custom ORDER BY id DESC limit #{pageNo},#{pageSize}
+    </select>
+    <select id="total" resultType="int">
+        SELECT count(1) FROM custom
+    </select>
+    <select id="findByID" resultType="com.xkygame.ssm.model.Custom">
+        SELECT * FROM custom WHERE id=#{id}
+    </select>
+    <update id="updateState" >
+        UPDATE custom SET state=#{state} WHERE id=#{id}
+    </update>
+    <delete id="delByIds" parameterType="Collection">
+        DELETE FROM custom WHERE id IN
+        <foreach collection="idArr" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+</mapper>
+

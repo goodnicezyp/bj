@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xkygame.ssm.dao.CouponUserDao">
+    <!--auto generated Code-->
+    <resultMap id="BaseResultMap" type="com.xkygame.ssm.model.CouponUser">
+        <result column="id" property="id" jdbcType="BIGINT"/>
+        <result column="coupon_id" property="coupon_id" jdbcType="BIGINT"/>
+        <result column="user_id" property="user_id" jdbcType="BIGINT"/>
+        <result column="create_time" property="create_time" jdbcType="TIMESTAMP"/>
+        <result column="used_time" property="used_time" jdbcType="TIMESTAMP"/>
+        <result column="expired_time" property="expired_time" jdbcType="TIMESTAMP"/>
+        <result column="state" property="state" jdbcType="INTEGER"/>
+        <result column="start_time" property="start_time" jdbcType="TIMESTAMP"/>
+        <result column="source_type" property="source_type"/>
+        <result column="trade_code" property="trade_code"/>
+        <result column="num" property="num"/>
+    </resultMap>
+    <resultMap id="DtoResultMap" type="com.xkygame.ssm.dto.CouponUserDto" autoMapping="true">
+        <result column="id" property="id" jdbcType="BIGINT"/>
+        <result column="start_time" property="start_time" jdbcType="TIMESTAMP"/>
+        <result column="expired_time" property="expired_time" jdbcType="TIMESTAMP"/>
+        <result column="trade_code" property="trade_code"/>
+        <result column="num" property="num"/>
+    </resultMap>
+
+    <!--auto generated Code-->
+    <sql id="Base_Column_List">
+        id,
+        coupon_id,
+        user_id,
+        create_time,
+        used_time,
+        expired_time,
+        state,
+        start_time,
+        source_type,
+        trade_code,
+        num
+    </sql>
+
+    <!--auto generated Code-->
+    <insert id="insert" useGeneratedKeys="true" keyProperty="couponUser.id">
+        INSERT INTO coupon_user (
+            id,
+            coupon_id,
+            user_id,
+            create_time,
+            used_time,
+            expired_time,
+            state,
+            start_time,
+            source_type,
+            trade_code,
+            num
+        ) VALUES (
+            #{couponUser.id},
+            #{couponUser.coupon_id},
+            #{couponUser.user_id},
+            #{couponUser.create_time},
+            #{couponUser.used_time},
+            #{couponUser.expired_time},
+            #{couponUser.state},
+            #{couponUser.start_time},
+            #{couponUser.source_type},
+            #{couponUser.trade_code},
+            #{couponUser.num}
+        )
+	</insert>
+
+    <!--auto generated Code-->
+    <insert id="insertSelective" useGeneratedKeys="true" keyProperty="couponUser.id">
+        INSERT INTO coupon_user
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="couponUser.id!=null"> id,</if>
+            <if test="couponUser.coupon_id!=null"> coupon_id,</if>
+            <if test="couponUser.user_id!=null"> user_id,</if>
+            <if test="couponUser.create_time!=null"> create_time,</if>
+            <if test="couponUser.used_time!=null"> used_time,</if>
+            <if test="couponUser.expired_time!=null"> expired_time,</if>
+            <if test="couponUser.state!=null"> state,</if>
+            <if test="couponUser.start_time!=null"> start_time,</if>
+            <if test="couponUser.source_type!=null"> source_type,</if>
+            <if test="couponUser.trade_code!=null"> trade_code,</if>
+            <if test="couponUser.num!=null"> num</if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="couponUser.id!=null"> #{couponUser.id},</if>
+            <if test="couponUser.coupon_id!=null"> #{couponUser.coupon_id},</if>
+            <if test="couponUser.user_id!=null"> #{couponUser.user_id},</if>
+            <if test="couponUser.create_time!=null"> #{couponUser.create_time},</if>
+            <if test="couponUser.used_time!=null"> #{couponUser.used_time},</if>
+            <if test="couponUser.expired_time!=null"> #{couponUser.expired_time},</if>
+            <if test="couponUser.state!=null"> #{couponUser.state},</if>
+            <if test="couponUser.start_time!=null"> #{couponUser.start_time},</if>
+            <if test="couponUser.source_type!=null"> #{couponUser.source_type},</if>
+            <if test="couponUser.trade_code!=null"> #{couponUser.trade_code},</if>
+            <if test="couponUser.num!=null"> #{couponUser.num}</if>
+        </trim>
+	</insert>
+
+    <!--auto generated Code-->
+    <insert id="insertList">        INSERT INTO coupon_user(
+        <include refid="Base_Column_List"/>
+        )VALUES
+        <foreach collection="couponUsers" item="couponUser" index="index" separator=",">
+            (
+            #{couponUser.id},
+            #{couponUser.coupon_id},
+            #{couponUser.user_id},
+            #{couponUser.create_time},
+            #{couponUser.used_time},
+            #{couponUser.expired_time},
+            #{couponUser.state},
+            #{couponUser.start_time},
+            #{couponUser.source_type},
+            #{couponUser.trade_code},
+            #{couponUser.num}
+            )
+        </foreach>
+	</insert>
+
+    <!--auto generated Code-->
+    <update id="update">
+        UPDATE coupon_user
+        <set>
+            <if test="couponUser.id != null"> id = #{couponUser.id},</if>
+            <if test="couponUser.coupon_id != null"> coupon_id = #{couponUser.coupon_id},</if>
+            <if test="couponUser.user_id != null"> user_id = #{couponUser.user_id},</if>
+            <if test="couponUser.create_time != null"> create_time = #{couponUser.create_time},</if>
+            <if test="couponUser.used_time != null"> used_time = #{couponUser.used_time},</if>
+            <if test="couponUser.expired_time != null"> expired_time = #{couponUser.expired_time},</if>
+            <if test="couponUser.state != null"> state = #{couponUser.state},</if>
+            <if test="couponUser.start_time != null"> start_time = #{couponUser.start_time},</if>
+            <if test="couponUser.source_type != null"> source_type = #{couponUser.source_type},</if>
+            <if test="couponUser.trade_code != null"> trade_code = #{couponUser.trade_code},</if>
+            <if test="couponUser.num != null"> num = #{couponUser.num}</if>
+        </set>
+		WHERE id = #{couponUser.id,jdbcType=BIGINT}
+    </update>
+
+    <select id="findMyCoupon" resultMap="DtoResultMap">
+        SELECT cu.id,cu.coupon_id,cu.user_id,
+        c.price,c.type,cu.trade_code,cu.start_time,cu.expired_time,cu.num
+        FROM coupon_user cu LEFT JOIN coupon c on cu.coupon_id=c.id
+        WHERE cu.user_id=#{id} AND cu.state = 0 AND cu.num>0 ORDER BY cu.id DESC
+         <if test="pageSize > 0">
+             limit #{pageNo},#{pageSize}
+         </if>
+    </select>
+    <select id="findByID" resultMap="DtoResultMap">
+        SELECT cu.id,cu.coupon_id,cu.user_id,
+        c.price,c.type,cu.trade_code,cu.start_time,cu.expired_time,cu.num
+        FROM coupon_user cu LEFT JOIN coupon c on cu.coupon_id=c.id
+         WHERE cu.state = 0 AND cu.num > 0 and cu.id=#{id}
+    </select>
+
+    <update id="useCoupon">
+      UPDATE coupon_user SET state=1,used_time=#{date},num=0
+      <if test="tradeCode != null"> ,trade_code=#{tradeCode}</if>
+      WHERE id=#{id} AND user_id=#{userid}
+    </update>
+    <select id="findById" resultType="com.xkygame.ssm.model.CouponUser">
+        SELECT * FROM coupon_user WHERE id=#{id}
+    </select>
+    <update id="addOne">
+        UPDATE coupon_user SET num = num + #{num},state=0 WHERE id=#{id}
+    </update>
+
+    <update id="reduceNum">
+        UPDATE coupon_user SET num = num - 1 WHERE id=#{id}
+    </update>
+    <select id="findByCouponidAndUserid" resultType="com.xkygame.ssm.model.CouponUser">
+        SELECT * FROM coupon_user WHERE coupon_id=#{id} AND user_id=#{userid}
+    </select>
+
+</mapper>
+

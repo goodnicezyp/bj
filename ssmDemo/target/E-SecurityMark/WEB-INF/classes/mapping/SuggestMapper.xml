@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xkygame.ssm.dao.SuggestDao">
+
+    <resultMap id="SuggestBaseMap" type="com.xkygame.ssm.model.Suggest" autoMapping="true">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="date" property="date" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <insert id="create" parameterType="com.xkygame.ssm.model.Suggest" useGeneratedKeys="true" keyProperty="id">
+        insert into suggest(userid, suggest, userPhone, date,sourceType,title,workid,state)
+        values (#{userid}, #{suggest}, #{userPhone}, #{date},#{sourceType},#{title},#{workid},#{state})
+    </insert>
+
+    <select id="getMySuggest" resultType="com.xkygame.ssm.dto.SuggestDto">
+        SELECT s.*,w.coverPic,w.type,w.eduPackage FROM suggest s LEFT JOIN works w on s.workid =w.id
+        WHERE s.userid=#{userid} AND sourceType=1 ORDER BY id DESC
+         limit #{pageNo},#{pageSize}
+    </select>
+
+</mapper>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xkygame.ssm.dao.LogDao">
+
+    <resultMap id="LogBaseMap" type="com.xkygame.ssm.model.LogInfo" autoMapping="true">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="date" property="date" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <insert id="create" parameterType="com.xkygame.ssm.model.LogInfo" useGeneratedKeys="true" keyProperty="id">
+        insert into loginfo(method,params,action,ip,exceptioncode,exceptiondetail,createTime,operator,type,fileFlag)
+        values (#{method},#{params},#{action},#{ip},#{exceptioncode},#{exceptiondetail},#{createTime},#{operator},#{type},#{fileFlag})
+    </insert>
+
+    <update id="update" parameterType="com.xkygame.ssm.model.LogInfo">
+        UPDATE loginfo SET method=#{method},params=#{params},action=#{action},ip=#{ip},exceptioncode=#{exceptioncode},
+        exceptiondetail=#{exceptiondetail},createTime=#{createTime},operator=#{operator},type=#{type},fileFlag=#{fileFlag} WHERE id=#{id}
+    </update>
+
+    <select id="selectAllLogs"  resultMap="LogBaseMap">
+        SELECT * from loginfo order by id desc
+    </select>
+
+    <select id="findSysLogByPage" resultMap="LogBaseMap">
+        SELECT * FROM loginfo
+        <where>
+            <if test="map.searchVal != '' and map.searchVal != null"> LOWER (concat(operator,action)) LIKE LOWER (#{map.searchVal})</if>
+        </where>
+        ORDER BY id DESC limit #{pageNo},#{pageSize}
+    </select>
+
+    <select id="Total" resultType="java.lang.Integer">
+        SELECT count(1) FROM (
+        SELECT id FROM loginfo
+        <where>
+            <if test="map.searchVal != '' and map.searchVal != null"> LOWER (concat(operator,action)) LIKE LOWER (#{map.searchVal})</if>
+        </where>
+        )t
+    </select>
+
+    <select id="findByID" resultType="com.xkygame.ssm.model.LogInfo">
+      SELECT * FROM loginfo where id=#{id}
+    </select>
+
+
+</mapper>

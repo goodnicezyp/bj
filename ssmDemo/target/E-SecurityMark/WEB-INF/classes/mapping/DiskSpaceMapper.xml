@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xkygame.ssm.dao.DiskSpaceDao">
+    <!--auto generated Code-->
+    <resultMap id="BaseResultMap" type="com.xkygame.ssm.model.DiskSpace">
+        <result column="id" property="id" jdbcType="BIGINT"/>
+        <result column="title" property="title" jdbcType="VARCHAR"/>
+        <result column="price" property="price" jdbcType="DECIMAL"/>
+        <result column="sizeNum" property="sizeNum" jdbcType="DECIMAL"/>
+        <result column="state" property="state" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <!--auto generated Code-->
+    <sql id="Base_Column_List">
+        id,
+        title,
+        price,
+        sizeNum,
+        state
+    </sql>
+
+    <!--auto generated Code-->
+    <insert id="insert" useGeneratedKeys="true" keyProperty="diskSpace.id">
+        INSERT INTO diskSpace (
+            id,
+            title,
+            price,
+            sizeNum,
+            state
+        ) VALUES (
+            #{diskSpace.id,jdbcType=BIGINT},
+            #{diskSpace.title,jdbcType=VARCHAR},
+            #{diskSpace.price,jdbcType=DECIMAL},
+            #{diskSpace.sizeNum,jdbcType=DECIMAL},
+            #{diskSpace.state,jdbcType=INTEGER}
+        )
+    </insert>
+
+    <!--auto generated Code-->
+    <insert id="insertSelective" useGeneratedKeys="true" keyProperty="diskSpace.id">
+        INSERT INTO diskSpace
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="diskSpace.id!=null"> id,</if>
+            <if test="diskSpace.title!=null"> title,</if>
+            <if test="diskSpace.price!=null"> price,</if>
+            <if test="diskSpace.sizeNum!=null"> sizeNum,</if>
+            <if test="diskSpace.state!=null"> state,</if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="diskSpace.id!=null">#{diskSpace.id,jdbcType=BIGINT},
+            </if>
+            <if test="diskSpace.title!=null">#{diskSpace.title,jdbcType=VARCHAR},
+            </if>
+            <if test="diskSpace.price!=null">#{diskSpace.price,jdbcType=DECIMAL},
+            </if>
+            <if test="diskSpace.sizeNum!=null">#{diskSpace.sizeNum,jdbcType=DECIMAL},
+            </if>
+            <if test="diskSpace.state!=null">#{diskSpace.state,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+
+    <!--auto generated Code-->
+    <insert id="insertList">
+        INSERT INTO diskSpace (
+        <include refid="Base_Column_List"/>
+        )VALUES
+        <foreach collection="diskSpaces" item="diskSpace" index="index" separator=",">
+            (
+            #{diskSpace.id,jdbcType=BIGINT},
+            #{diskSpace.title,jdbcType=VARCHAR},
+            #{diskSpace.price,jdbcType=DECIMAL},
+            #{diskSpace.sizeNum,jdbcType=DECIMAL},
+            #{diskSpace.state,jdbcType=INTEGER}
+            )
+        </foreach>
+    </insert>
+
+    <!--auto generated Code-->
+    <update id="update">
+        UPDATE diskSpace
+        <set>
+            <if test="diskSpace.id != null"> id= #{diskSpace.id,jdbcType=BIGINT},</if>
+            <if test="diskSpace.title != null"> title= #{diskSpace.title,jdbcType=VARCHAR},</if>
+            <if test="diskSpace.price != null"> price= #{diskSpace.price,jdbcType=DECIMAL},</if>
+            <if test="diskSpace.sizeNum != null"> sizeNum= #{diskSpace.sizeNum,jdbcType=DECIMAL},</if>
+            <if test="diskSpace.state != null"> state= #{diskSpace.state,jdbcType=INTEGER}</if>
+        </set>
+        WHERE id = #{diskSpace.id,jdbcType=BIGINT}
+    </update>
+    <select id="findAll" resultType="com.xkygame.ssm.model.DiskSpace">
+        SELECT * FROM diskSpace WHERE state = 1 ORDER BY id ASC
+    </select>
+    <select id="findByID" resultMap="BaseResultMap">
+        SELECT * FROM diskSpace WHERE id=#{id}
+    </select>
+    <update id="updateState">
+        UPDATE diskSpace SET state=#{state} WHERE id=#{id}
+    </update>
+    <delete id="delByIds" parameterType="Collection">
+        DELETE FROM diskSpace WHERE id IN
+        <foreach collection="idArr" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+    <select id="findByPage" resultType="com.xkygame.ssm.model.DiskSpace">
+        SELECT * FROM diskSpace ORDER BY id DESC limit #{pageNo},#{pageSize}
+    </select>
+    <select id="total" resultType="int">
+      SELECT count(1) FROM diskSpace
+    </select>
+</mapper>
+

@@ -1,0 +1,10 @@
+-- auto Generated on 2019-03-23 11:37:15 
+-- DROP TABLE IF EXISTS custom; 
+CREATE TABLE custom(
+	id BIGINT (11) NOT NULL AUTO_INCREMENT COMMENT 'id',
+	userid BIGINT (11) NOT NULL DEFAULT 0 COMMENT 'userid',
+	userPhone VARCHAR (50) NOT NULL DEFAULT '' COMMENT '手机号',
+	userImg VARCHAR (100) NOT NULL DEFAULT '' COMMENT '客服头像 或者二维码',
+	state INT (2) NOT NULL DEFAULT 0 COMMENT '状态 0：已停用 1：已启用',
+	PRIMARY KEY (id)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT 'custom';

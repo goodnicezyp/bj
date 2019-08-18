@@ -1,0 +1,16 @@
+-- auto Generated on 2019-03-20 10:20:28 
+-- DROP TABLE IF EXISTS profitOrder; 
+CREATE TABLE profitOrder(
+	id BIGINT (11) NOT NULL AUTO_INCREMENT COMMENT 'id',
+	userID BIGINT (11) NOT NULL DEFAULT 0 COMMENT '收益所属用户ID',
+	orderNo VARCHAR (50) NOT NULL DEFAULT '' COMMENT '订单号',
+	buyUserID BIGINT (11) NOT NULL DEFAULT 0 COMMENT '购买者用户ID',
+	workID BIGINT (11) NOT NULL DEFAULT 0 COMMENT '作品ID',
+	createTime DATETIME NOT NULL DEFAULT '1000-01-01 00:00:00' COMMENT 'createTime',
+	profit DECIMAL (11,2) NOT NULL DEFAULT 0 COMMENT '收益金额',
+INDEX `ix_buyUserID`(buyUserID),
+INDEX `ix_userID`(userID),
+INDEX `ix_orderNo`(orderNo),
+INDEX `ix_workID`(workID),
+	PRIMARY KEY (id)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT 'profitOrder';

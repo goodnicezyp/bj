@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xkygame.ssm.dao.OrderDao">
+
+    <resultMap id="orderBaseMap" type="com.xkygame.ssm.model.Order" autoMapping="true">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="createTime" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="finishTime" property="finishTime" jdbcType="TIMESTAMP"/>
+        <result column="confirmTime" property="confirmTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <resultMap id="tradeGroupDtoMap" type="com.xkygame.ssm.dto.TradeGroupDto" autoMapping="true">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="dayTime" property="dayTime" jdbcType="VARCHAR" />
+        <result column="createTime" property="createTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <resultMap id="BuyWorkDtoMap" type="com.xkygame.ssm.dto.BuyWorkDto" autoMapping="true">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="createTime" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="finishTime" property="finishTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <resultMap id="UnPayOrderDtoMap" type="com.xkygame.ssm.dto.UnPayOrderDto" autoMapping="true">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="createTime" property="createTime" jdbcType="TIMESTAMP"/>
+        <collection property="orderItemList" ofType="com.xkygame.ssm.dto.OrderItemDto" autoMapping="true">
+            <id column="r_id" property="id" jdbcType="BIGINT"/>
+            <result column="r_price" property="price" jdbcType="DECIMAL"/>
+            <result column="r_createTime" property="createTime" jdbcType="TIMESTAMP"/>
+        </collection>
+    </resultMap>
+
+    <insert id="create" parameterType="com.xkygame.ssm.model.Order" useGeneratedKeys="true" keyProperty="id">
+        insert into w_order(userid,userName, iuserid,state,orderNo,createTime,
+        finishTime,confirmTime,sourceType,price,discountFee,discountType,inviteCode,channelCode,
+        couponidArr,payType)
+        values (#{userid},#{userName}, #{iuserid},#{state},#{orderNo},
+        #{createTime},#{finishTime},#{confirmTime},#{sourceType}, #{price}, #{discountFee},#{discountType},
+        #{inviteCode},#{channelCode},#{couponidArr},#{payType})
+    </insert>
+
+    <select id="findByWorkidAndUserid" resultType="com.xkygame.ssm.model.Order">
+        SELECT * FROM w_order WHERE workid=#{workid} AND userid=#{userid} AND state > 0
+    </select>
+
+    <select id="findByOrderNo" resultType="com.xkygame.ssm.model.Order">
+        SELECT * FROM w_order WHERE orderNo=#{orderNo}
+    </select>
+
+    <update id="updateOrderNo">
+      UPDATE w_order SET orderNo =#{newOrderNo} WHERE orderNo=#{orderNo}
+    </update>
+    <update id="updateOrderFinish">
+        UPDATE w_order SET state=#{state},finishTime=#{finishTime} WHERE orderNo=#{orderNo}
+    </update>
+
+    <select id="findUserTradeByPage" resultMap="tradeGroupDtoMap">
+        SELECT w.id,w.price,createTime,w.sourceType,DATE_FORMAT(createTime,'%Y年%m月') as dayTime,
+        o.diskTitle,o.name,o.memberTitle,o.type,o.coverPic,o.memberid
+        FROM w_order w left join orderItem o on w.orderNo=o.orderNo
+        WHERE w.userid=#{userid} AND state > 0 and payType = 0
+        ORDER BY createTime DESC
+        limit #{pageNo},#{pageSize}
+    </select>
+
+    <select id="getMyBuyWork" resultMap="BuyWorkDtoMap">
+        SELECT w.id,w.name,ot.orderNo,w.recordNo,w.coverPic,w.type,w.url,
+        if(wx.realName = '',wx.company,wx.realName) as userName,ot.price,o.createTime,w.eduPackage
+         FROM orderItem ot LEFT JOIN works w on ot.workid=w.id
+         LEFT JOIN w_order o on ot.orderNo=o.orderNo
+         LEFT JOIN wxuser wx on w.userid=wx.id
+         WHERE o.userid=#{id} AND o.sourceType = 0
+        ORDER BY o.id DESC limit #{pageNo},#{pageSize}
+    </select>
+    <select id="findByPage" resultMap="orderBaseMap">
+        select * from w_order
+        <where>
+            <if test="map.searchVal != null and map.searchVal != ''">lower (concat(orderNo,userName)) like lower (#{map.searchVal})</if>
+            <if test="map.sourceType != -1"> AND sourceType=#{map.sourceType}</if>
+            <if test="map.state !=null and map.state !='' or map.state==0"> AND state=#{map.state}</if>
+            <if test="map.date !=null and map.date !=''">AND finishTime <![CDATA[>=]]> #{map.date} </if>
+            <if test="map.dateEnd !=null and map.dateEnd !=''">AND finishTime <![CDATA[<=]]> #{map.dateEnd}</if>
+        </where>
+        order by id desc limit #{pageNo},#{pageSize}
+    </select>
+    <select id="total" resultType="int">
+        select count(1) from w_order
+        <where>
+            <if test="map.searchVal != null and map.searchVal != ''">lower (concat(orderNo,userName)) like lower (#{map.searchVal})</if>
+            <if test="map.sourceType != -1"> AND sourceType=#{map.sourceType}</if>
+            <if test="map.state !=null and map.state !='' or map.state==0"> AND state=#{map.state}</if>
+            <if test="map.date !=null and map.date !=''">AND finishTime <![CDATA[>=]]> #{map.date} </if>
+            <if test="map.dateEnd !=null and map.dateEnd !=''">AND finishTime <![CDATA[<=]]> #{map.dateEnd}</if>
+        </where>
+    </select>
+    <select id="findUnPayOrder" resultMap="UnPayOrderDtoMap">
+        SELECT o.id,o.orderNo,o.state,o.createTime,o.sourceType,o.price,
+        ot.id as r_id,ot.workid,ot.price as r_price,ot.memberTitle,ot.monthNum,
+        ot.diskTitle,ot.sizeNum,
+        w.name,w.cateName,w.type,w.coverPic,w.eduPackage,w.recordNo,w.copyright,w.createTime as r_createTime
+        FROM w_order o
+        LEFT JOIN orderItem ot on o.orderNo=ot.orderNo
+        LEFT JOIN works w on ot.workid=w.id
+        WHERE o.state = -1 AND o.userid=#{userid}
+        ORDER BY o.id DESC limit #{pageNo},#{pageSize}
+    </select>
+
+    <update id="cancel">
+        UPDATE w_order SET state = -2 WHERE orderNo=#{orderNo}
+    </update>
+    <select id="findWorkBuyByPage" resultMap="BuyWorkDtoMap">
+        SELECT o.*,if(w.realName='',w.company,w.realName) as realName,w.userName,w.userImg,wo.createTime,wo.finishTime
+        FROM orderItem o LEFT JOIN w_order wo on o.orderNo=wo.orderNo
+        LEFT JOIN wxuser w on o.userid=w.id
+        <where>
+            wo.state > 0 AND o.workid=#{map.workid}
+            <if test="map.searchVal != null and map.searchVal != ''">
+                AND LOWER (concat(if(b.realName='',b.company,b.realName),w.userName)) LIKE LOWER (#{map.searchVal})
+            </if>
+        </where>
+        ORDER by o.id DESC
+        limit #{pageNo},#{pageSize}
+    </select>
+
+    <select id="workBuyTotal" resultType="int">
+        SELECT count(1) FROM orderItem o LEFT JOIN w_order wo on o.orderNo=wo.orderNo
+        LEFT JOIN wxuser w on o.userid=w.id
+        <where>
+            wo.state > 0 AND o.workid=#{map.workid}
+            <if test="map.searchVal != null and map.searchVal != ''">
+                AND LOWER (concat(if(b.realName='',b.company,b.realName),w.userName)) LIKE LOWER (#{map.searchVal})
+            </if>
+        </where>
+    </select>
+
+
+</mapper>

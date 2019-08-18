@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="ehcache.xsd">
+
+    <diskStore path = "/opt/www/cache" />
+    <defaultCache
+            maxElementsInMemory="10000"
+            eternal="false"
+            overflowToDisk="true"
+            timeToIdleSeconds="300"
+            timeToLiveSeconds="600"
+            diskPersistent="false"
+            diskExpiryThreadIntervalSeconds="300" />
+
+    <cache name="legendapl"
+           maxElementsInMemory="10000"
+           eternal="false"
+           overflowToDisk="false"
+           timeToIdleSeconds="300"
+           timeToLiveSeconds="600"
+           diskPersistent="false"
+           diskExpiryThreadIntervalSeconds="300" />
+</ehcache>

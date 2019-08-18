@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xkygame.ssm.dao.AdminRoleDao">
+
+    <resultMap id="AdminRoleBaseMap" type="com.xkygame.ssm.model.AdminRole">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="adminid" property="adminid" jdbcType="BIGINT"/>
+        <result column="roleid" property="roleid" jdbcType="BIGINT"/>
+    </resultMap>
+
+    <insert id="create" parameterType="com.xkygame.ssm.model.AdminRole" useGeneratedKeys="true" keyProperty="id">
+        insert into adminrole(adminid, roleid)
+        values (#{adminid}, #{roleid})
+    </insert>
+
+    <delete id="delete" parameterType="java.lang.Long">
+        delete from adminrole where adminid = #{adminid}
+    </delete>
+
+    <select id="selectAdminsByRoleIds" resultType="java.lang.Long">
+        SELECT adminid from adminrole where roleid in
+        <foreach collection="idArr" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+</mapper>

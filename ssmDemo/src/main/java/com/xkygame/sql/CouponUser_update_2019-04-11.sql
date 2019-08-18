@@ -1,0 +1,2 @@
+ALTER TABLE coupon_user
+	ADD num INT(11) NOT NULL DEFAULT 0 COMMENT 'num';

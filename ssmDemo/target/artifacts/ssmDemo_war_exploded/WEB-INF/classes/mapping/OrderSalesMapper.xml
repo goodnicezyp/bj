@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xkygame.ssm.dao.OrderSalesDao">
+
+    <resultMap id="OrderSalesBaseMap" type="com.xkygame.ssm.model.OrderSales" autoMapping="true">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="createTime" property="createTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <resultMap id="OrderSaleDtoMap" type="com.xkygame.ssm.dto.OrderSaleDto" autoMapping="true">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="createTime" property="createTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <insert id="create" parameterType="com.xkygame.ssm.model.OrderSales" useGeneratedKeys="true" keyProperty="id">
+        insert into ordersales(userid, iuserid,orderNo, price, createTime,state,payType)
+        values (#{userid},#{iuserid}, #{orderNo}, #{price} ,#{createTime},#{state},#{payType})
+    </insert>
+
+    <update id="update" parameterType="com.xkygame.ssm.model.OrderSales">
+        UPDATE ordersales SET
+        userid=#{userid},
+        iuserid=#{iuserid},
+        orderNo=#{orderNo},
+        price=#{price},
+        createTime=#{createTime},
+        state=#{state},
+        payType=#{payType} WHERE id=#{id}
+    </update>
+
+
+    <select id="findByPage" resultMap="OrderSaleDtoMap">
+        select o.*,w.userName,w.userImg,wo.sourceType from ordersales o
+        left join wxuser w on o.userid=w.id LEFT JOIN w_order wo on wo.orderNo=o.orderNo
+        <where>
+            <if test="map.searchVal != null and map.searchVal != ''">lower (concat(w.userName,o.orderNo)) like lower (#{map.searchVal})</if>
+        </where>
+        order by id desc limit #{pageNo},#{pageSize}
+    </select>
+
+    <select id="total" resultType="java.lang.Integer">
+        select count(1) from ordersales o
+        left join wxuser w on o.userid=w.id LEFT JOIN w_order wo on wo.orderNo=o.orderNo
+        <where>
+            <if test="map.searchVal != null and map.searchVal != ''">LOWER (concat(w.userName,o.orderNo)) LIKE LOWER (#{map.searchVal})</if>
+        </where>
+    </select>
+
+    <select id="countTotalSale" resultType="java.math.BigDecimal">
+        SELECT ifnull(sum(price),0) FROM ordersales WHERE state = 0
+    </select>
+    <select id="countCurSale" resultType="java.math.BigDecimal">
+        SELECT ifnull(sum(price),0) FROM ordersales WHERE state = 0 AND
+        date_format(createTime,'%y-%m-%d')=date_format(DATE_SUB(curdate(), INTERVAL 0 DAY),'%y-%m-%d')
+    </select>
+
+</mapper>

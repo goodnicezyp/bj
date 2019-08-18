@@ -1,0 +1,2 @@
+ALTER TABLE profitorder
+	ADD name VARCHAR(200) NOT NULL DEFAULT '' COMMENT 'name';

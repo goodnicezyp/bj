@@ -1,0 +1,4 @@
+ALTER TABLE orderitem
+	ADD type INT(2) NOT NULL DEFAULT 0 COMMENT 'type';
+ALTER TABLE orderitem
+	ADD coverPic VARCHAR(200) DEFAULT '' COMMENT 'coverPic';

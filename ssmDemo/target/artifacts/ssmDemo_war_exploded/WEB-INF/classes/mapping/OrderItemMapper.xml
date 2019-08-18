@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xkygame.ssm.dao.OrderItemDao">
+    <!--auto generated Code-->
+    <resultMap id="BaseResultMap" type="com.xkygame.ssm.model.OrderItem">
+        <result column="id" property="id" jdbcType="BIGINT"/>
+        <result column="orderNo" property="orderNo" jdbcType="VARCHAR"/>
+        <result column="workid" property="workid" jdbcType="BIGINT"/>
+        <result column="memberid" property="memberid" jdbcType="INTEGER"/>
+        <result column="memberTitle" property="memberTitle" jdbcType="VARCHAR"/>
+        <result column="monthNum" property="monthNum" jdbcType="INTEGER"/>
+        <result column="price" property="price" jdbcType="DECIMAL"/>
+        <result column="sourceType" property="sourceType" jdbcType="INTEGER"/>
+        <result column="diskID" property="diskID"/>
+        <result column="diskTitle" property="diskTitle"/>
+        <result column="sizeNum" property="sizeNum"/>
+        <result column="userid" property="userid"/>
+        <result column="name" property="name"/>
+        <result column="type" property="type"/>
+        <result column="coverPic" property="coverPic"/>
+    </resultMap>
+
+    <!--auto generated Code-->
+    <sql id="Base_Column_List">
+        id,
+        orderNo,
+        workid,
+        memberid,
+        memberTitle,
+        monthNum,
+        price,
+        sourceType,
+        diskID,
+        diskTitle,
+        sizeNum,
+        userid,
+        name,
+        type,
+coverPic
+</sql>
+
+    <!--auto generated Code-->
+    <insert id="insert" useGeneratedKeys="true" keyProperty="orderItem.id">
+        INSERT INTO orderitem (
+            id,
+            orderNo,
+            workid,
+            memberid,
+            memberTitle,
+            monthNum,
+            price,
+            sourceType,
+            diskID,
+            diskTitle,
+            sizeNum,
+            userid,
+            name,
+            type,
+            coverPic
+        ) VALUES (
+            #{orderItem.id},
+            #{orderItem.orderNo},
+            #{orderItem.workid},
+            #{orderItem.memberid},
+            #{orderItem.memberTitle},
+            #{orderItem.monthNum},
+            #{orderItem.price},
+            #{orderItem.sourceType},
+            #{orderItem.diskID},
+            #{orderItem.diskTitle},
+            #{orderItem.sizeNum},
+            #{orderItem.userid},
+            #{orderItem.name},
+            #{orderItem.type},
+            #{orderItem.coverPic}
+        )
+	</insert>
+
+    <!--auto generated Code-->
+    <insert id="insertSelective" useGeneratedKeys="true" keyProperty="orderItem.id">
+        INSERT INTO orderitem
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="orderItem.id!=null"> id,</if>
+            <if test="orderItem.orderNo!=null"> orderNo,</if>
+            <if test="orderItem.workid!=null"> workid,</if>
+            <if test="orderItem.memberid!=null"> memberid,</if>
+            <if test="orderItem.memberTitle!=null"> memberTitle,</if>
+            <if test="orderItem.monthNum!=null"> monthNum,</if>
+            <if test="orderItem.price!=null"> price,</if>
+            <if test="orderItem.sourceType!=null"> sourceType,</if>
+            <if test="orderItem.diskID!=null"> diskID,</if>
+            <if test="orderItem.diskTitle!=null"> diskTitle,</if>
+            <if test="orderItem.sizeNum!=null"> sizeNum,</if>
+            <if test="orderItem.userid!=null"> userid,</if>
+            <if test="orderItem.name!=null"> name,</if>
+            <if test="orderItem.type!=null"> type,</if>
+            <if test="orderItem.coverPic!=null"> coverPic</if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="orderItem.id!=null"> #{orderItem.id},</if>
+            <if test="orderItem.orderNo!=null"> #{orderItem.orderNo},</if>
+            <if test="orderItem.workid!=null"> #{orderItem.workid},</if>
+            <if test="orderItem.memberid!=null"> #{orderItem.memberid},</if>
+            <if test="orderItem.memberTitle!=null"> #{orderItem.memberTitle},</if>
+            <if test="orderItem.monthNum!=null"> #{orderItem.monthNum},</if>
+            <if test="orderItem.price!=null"> #{orderItem.price},</if>
+            <if test="orderItem.sourceType!=null"> #{orderItem.sourceType},</if>
+            <if test="orderItem.diskID!=null"> #{orderItem.diskID},</if>
+            <if test="orderItem.diskTitle!=null"> #{orderItem.diskTitle},</if>
+            <if test="orderItem.sizeNum!=null"> #{orderItem.sizeNum},</if>
+            <if test="orderItem.userid!=null"> #{orderItem.userid},</if>
+            <if test="orderItem.name!=null"> #{orderItem.name},</if>
+            <if test="orderItem.type!=null"> #{orderItem.type},</if>
+            <if test="orderItem.coverPic!=null"> #{orderItem.coverPic}</if>
+        </trim>
+	</insert>
+
+    <!--auto generated Code-->
+    <insert id="insertList">        INSERT INTO orderitem(
+        <include refid="Base_Column_List"/>
+        )VALUES
+        <foreach collection="orderItems" item="orderItem" index="index" separator=",">
+            (
+            #{orderItem.id},
+            #{orderItem.orderNo},
+            #{orderItem.workid},
+            #{orderItem.memberid},
+            #{orderItem.memberTitle},
+            #{orderItem.monthNum},
+            #{orderItem.price},
+            #{orderItem.sourceType},
+            #{orderItem.diskID},
+            #{orderItem.diskTitle},
+            #{orderItem.sizeNum},
+            #{orderItem.userid},
+            #{orderItem.name},
+            #{orderItem.type},
+            #{orderItem.coverPic}
+            )
+        </foreach>
+	</insert>
+
+    <!--auto generated Code-->
+    <update id="update">
+        UPDATE orderitem
+        <set>
+            <if test="orderItem.id != null"> id = #{orderItem.id},</if>
+            <if test="orderItem.orderNo != null"> orderNo = #{orderItem.orderNo},</if>
+            <if test="orderItem.workid != null"> workid = #{orderItem.workid},</if>
+            <if test="orderItem.memberid != null"> memberid = #{orderItem.memberid},</if>
+            <if test="orderItem.memberTitle != null"> memberTitle = #{orderItem.memberTitle},</if>
+            <if test="orderItem.monthNum != null"> monthNum = #{orderItem.monthNum},</if>
+            <if test="orderItem.price != null"> price = #{orderItem.price},</if>
+            <if test="orderItem.sourceType != null"> sourceType = #{orderItem.sourceType},</if>
+            <if test="orderItem.diskID != null"> diskID = #{orderItem.diskID},</if>
+            <if test="orderItem.diskTitle != null"> diskTitle = #{orderItem.diskTitle},</if>
+            <if test="orderItem.sizeNum != null"> sizeNum = #{orderItem.sizeNum},</if>
+            <if test="orderItem.userid != null"> userid = #{orderItem.userid},</if>
+            <if test="orderItem.name != null"> name = #{orderItem.name},</if>
+            <if test="orderItem.type != null"> type = #{orderItem.type},</if>
+            <if test="orderItem.coverPic != null"> coverPic = #{orderItem.coverPic}</if>
+        </set>
+		WHERE id = #{orderItem.id,jdbcType=BIGINT}
+    </update>
+
+    <select id="findByOrderNo" resultMap="BaseResultMap">
+        SELECT * FROM orderItem WHERE orderNo=#{orderNo}
+    </select>
+    <select id="findByWorkidAndUserid" resultType="com.xkygame.ssm.model.OrderItem">
+          SELECT ot.* FROM orderItem ot LEFT JOIN w_order w on ot.orderNo=w.orderNo
+          WHERE ot.userid=#{userid} AND ot.workid=#{id} and w.state != -2 AND w.state != 0 limit 1
+    </select>
+    <select id="findAllByOrderNo" resultType="com.xkygame.ssm.dto.TradeGroupDto">
+        SELECT * from orderItem WHERE orderNo=#{orderNo}
+    </select>
+</mapper>
+

@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xkygame.ssm.dao.ProfessionUserDao">
+    <!--auto generated Code-->
+    <resultMap id="BaseResultMap" type="com.xkygame.ssm.model.ProfessionUser">
+        <result column="id" property="id" jdbcType="BIGINT"/>
+        <result column="userid" property="userid" jdbcType="BIGINT"/>
+        <result column="professionid" property="professionid" jdbcType="BIGINT"/>
+    </resultMap>
+
+    <!--auto generated Code-->
+    <sql id="Base_Column_List">
+        id,
+        userid,
+        professionid
+    </sql>
+
+    <!--auto generated Code-->
+    <insert id="insert" useGeneratedKeys="true" keyProperty="professionUser.id">
+        INSERT INTO professionUser (
+            id,
+            userid,
+            professionid
+        ) VALUES (
+            #{professionUser.id,jdbcType=BIGINT},
+            #{professionUser.userid,jdbcType=BIGINT},
+            #{professionUser.professionid,jdbcType=BIGINT}
+        )
+    </insert>
+
+    <!--auto generated Code-->
+    <insert id="insertSelective" useGeneratedKeys="true" keyProperty="professionUser.id">
+        INSERT INTO professionUser
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="professionUser.id!=null"> id,</if>
+            <if test="professionUser.userid!=null"> userid,</if>
+            <if test="professionUser.professionid!=null"> professionid,</if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="professionUser.id!=null">#{professionUser.id,jdbcType=BIGINT},
+            </if>
+            <if test="professionUser.userid!=null">#{professionUser.userid,jdbcType=BIGINT},
+            </if>
+            <if test="professionUser.professionid!=null">#{professionUser.professionid,jdbcType=BIGINT},
+            </if>
+        </trim>
+    </insert>
+
+    <!--auto generated Code-->
+    <insert id="insertList">
+        INSERT INTO professionUser (
+        <include refid="Base_Column_List"/>
+        )VALUES
+        <foreach collection="professionUsers" item="professionUser" index="index" separator=",">
+            (
+            #{professionUser.id,jdbcType=BIGINT},
+            #{professionUser.userid,jdbcType=BIGINT},
+            #{professionUser.professionid,jdbcType=BIGINT}
+            )
+        </foreach>
+    </insert>
+
+    <!--auto generated Code-->
+    <update id="update">
+        UPDATE professionUser
+        <set>
+            <if test="professionUser.id != null"> id= #{professionUser.id,jdbcType=BIGINT},</if>
+            <if test="professionUser.userid != null"> userid= #{professionUser.userid,jdbcType=BIGINT},</if>
+            <if test="professionUser.professionid != null"> professionid= #{professionUser.professionid,jdbcType=BIGINT}</if>
+        </set>
+        WHERE id = #{professionUser.id,jdbcType=BIGINT}
+    </update>
+
+    <insert id="batchInsert" parameterType="Collection">
+        <foreach collection="idArr" item="item">
+            INSERT INTO professionUser(userid,professionid) VALUES (#{id},#{item});
+        </foreach>
+    </insert>
+
+    <delete id="batchDel">
+        delete from professionUser where userid=#{userid}
+    </delete>
+</mapper>
+

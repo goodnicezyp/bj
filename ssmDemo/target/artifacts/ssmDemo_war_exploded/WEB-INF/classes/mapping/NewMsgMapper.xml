@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xkygame.ssm.dao.NewMsgDao">
+
+    <resultMap id="newMsgBaseMap" type="com.xkygame.ssm.dto.NewMessageDto" autoMapping="true">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="createTime" property="createTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <resultMap id="CountNewMessageMap" type="com.xkygame.ssm.dto.CountNewMessageDto" autoMapping="true">
+    </resultMap>
+
+    <insert id="create" parameterType="com.xkygame.ssm.dto.NewMessageDto" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO newMsg(userid,replyID,remarkID,iuserid,userName,userPic,workid,memberid,
+        type,content,workPic,createTime,isRead,robotFlag)
+        VALUES (#{userid},#{replyID},#{remarkID},#{iuserid},#{userName},
+        #{userPic},#{workid},#{memberid},#{type},#{content},#{workPic},#{createTime},#{isRead},#{robotFlag})
+    </insert>
+
+    <select id="findByUserid" resultMap="newMsgBaseMap">
+        SELECT n.userid,n.replyID,n.remarkID,n.userName,n.userPic,n.robotFlag,
+        n.iuserid,n.type,n.content,n.workPic,n.createTime,ifnull(case when t.state=0 then 0 else t.id end,0) as workid
+        FROM newMsg n left join works t on n.workid=t.id
+        WHERE n.userid=#{id}  ORDER BY n.createTime DESC
+    </select>
+
+    <select id="countNewMessage" resultMap="CountNewMessageMap">
+        select count(id)as num , userPic from newMsg WHERE userid=#{userid} and isRead = 0 ORDER BY createTime DESC
+    </select>
+
+    <update id="updateReadFlag">
+        UPDATE newMsg SET isRead = 1 WHERE isRead = 0 and userid=#{id}
+    </update>
+
+    <select id="findMyOldMsgByPage" resultMap="newMsgBaseMap">
+        SELECT * from newMsg WHERE userid=#{id} and type = 6
+        ORDER BY createTime DESC limit #{pageNo},#{pageSize}
+    </select>
+
+    <select id="findWorkLikeByUserid" resultMap="newMsgBaseMap">
+        SELECT wk.id,wk.workid,wk.userid as iuserid,
+        wk.createTime,wo.coverPic as workPic,
+        wo.type,w.userName,w.userImg as userPic FROM workLiked wk
+        LEFT JOIN wxuser w on wk.userid=w.id
+        LEFT JOIN works wo on wo.id=wk.workid
+        WHERE wo.userid=#{id}
+        ORDER BY wk.createTime DESC
+        limit #{pageNo},#{pageSize}
+    </select>
+
+    <select id="findCollectByUserid" resultMap="newMsgBaseMap">
+        SELECT c.id,c.userid as iuserid,c.workid,c.createTime,wo.coverPic as workPic,
+        wo.type,w.userName,w.userImg as userPic FROM collections c
+        LEFT JOIN wxuser w on c.userid=w.id
+        LEFT JOIN works wo on wo.id=c.workid
+        WHERE wo.userid=#{id}
+        ORDER BY c.createTime DESC
+        limit #{pageNo},#{pageSize}
+    </select>
+
+    <select id="findShareByUserid" resultMap="newMsgBaseMap">
+        SELECT s.id,s.workid,s.userid as iuserid,s.createTime,wo.coverPic as workPic,
+        wo.type,w.userName,w.userImg as userPic FROM shareWork s
+        LEFT JOIN wxuser w on s.userid=w.id
+        LEFT JOIN works wo on wo.id=s.workid
+        WHERE wo.userid=#{id}
+        ORDER BY s.createTime DESC
+        limit #{pageNo},#{pageSize}
+    </select>
+    <select id="findDownWorkByUserid" resultMap="newMsgBaseMap">
+        SELECT d.id,d.userid as iuserid,d.workid,d.createTime,wo.coverPic as workPic,
+        wo.type,w.userName,w.userImg as userPic FROM downloadRecord d
+        LEFT JOIN wxuser w on d.userid=w.id
+        LEFT JOIN works wo on wo.id=d.workid
+        WHERE wo.userid=#{id}
+        ORDER BY d.createTime DESC
+        limit #{pageNo},#{pageSize}
+    </select>
+
+    <select id="countAllLikedNum" resultType="int">
+        SELECT count(1) FROM (
+          SELECT w.id FROM workLiked w LEFT JOIN works w1 on w.workid=w1.id WHERE w1.userid=#{id}
+        )t
+    </select>
+    <select id="countAllCollectNum" resultType="int">
+        SELECT count(1) FROM (
+          SELECT w.id FROM collections w LEFT JOIN works w1 on w.workid=w1.id WHERE w1.userid=#{id}
+        )t
+    </select>
+    <select id="countAllShareNum" resultType="int">
+        SELECT count(1) FROM (
+          SELECT w.id FROM shareWork w LEFT JOIN works w1 on w.workid=w1.id WHERE w1.userid=#{id}
+        )t
+    </select>
+    <select id="countAllDownNum" resultType="int">
+        SELECT count(1) FROM (
+          SELECT w.id FROM downloadRecord w LEFT JOIN works w1 on w.workid=w1.id WHERE w1.userid=#{id}
+        )t
+    </select>
+    <select id="countAllCareNum" resultType="int">
+        SELECT count(1) FROM (
+          SELECT id FROM follower WHERE
+           ((careUserid=#{id} AND type > 0) or (fansUserid=#{id} AND type = 2))
+        )t
+    </select>
+    <select id="countAllReplyNum" resultType="int">
+        SELECT count(1) FROM newmsg WHERE userid=#{id} and type = 6
+    </select>
+
+    <select id="findSysMsg" resultMap="newMsgBaseMap">
+        SELECT * FROM newmsg WHERE userid=#{id} and type = 7
+        ORDER BY id DESC limit #{pageNo},#{pageSize}
+    </select>
+
+
+</mapper>

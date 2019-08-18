@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xkygame.ssm.dao.ProfitOrderDao">
+    <!--auto generated Code-->
+    <resultMap id="BaseResultMap" type="com.xkygame.ssm.model.ProfitOrder">
+        <result column="id" property="id" jdbcType="BIGINT"/>
+        <result column="userID" property="userID" jdbcType="BIGINT"/>
+        <result column="orderNo" property="orderNo" jdbcType="VARCHAR"/>
+        <result column="buyUserID" property="buyUserID" jdbcType="BIGINT"/>
+        <result column="workID" property="workID" jdbcType="BIGINT"/>
+        <result column="createTime" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="profit" property="profit" jdbcType="DECIMAL"/>
+        <result column="name" property="name"/>
+        <result column="memberid" property="memberid"/>
+        <result column="memberTitle" property="memberTitle"/>
+        <result column="monthNum" property="monthNum"/>
+        <result column="sourceType" property="sourceType"/>
+    </resultMap>
+    <resultMap id="DtoResultMap" type="com.xkygame.ssm.dto.ProfitOrderDto" autoMapping="true">
+        <result column="id" property="id" jdbcType="BIGINT"/>
+        <result column="createTime" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="name" property="name"/>
+        <result column="memberid" property="memberid"/>
+        <result column="memberTitle" property="memberTitle"/>
+        <result column="monthNum" property="monthNum"/>
+        <result column="sourceType" property="sourceType"/>
+    </resultMap>
+
+    <!--auto generated Code-->
+    <sql id="Base_Column_List">
+        id,
+        userID,
+        orderNo,
+        buyUserID,
+        workID,
+        createTime,
+        profit,
+        name,
+        memberid,
+        memberTitle,
+        monthNum,
+        sourceType
+    </sql>
+
+    <!--auto generated Code-->
+    <insert id="insert" useGeneratedKeys="true" keyProperty="profitOrder.id">
+        INSERT INTO profitorder (
+            id,
+            userID,
+            orderNo,
+            buyUserID,
+            workID,
+            createTime,
+            profit,
+            name,
+            memberid,
+            memberTitle,
+            monthNum,
+            sourceType
+        ) VALUES (
+            #{profitOrder.id},
+            #{profitOrder.userID},
+            #{profitOrder.orderNo},
+            #{profitOrder.buyUserID},
+            #{profitOrder.workID},
+            #{profitOrder.createTime},
+            #{profitOrder.profit},
+            #{profitOrder.name},
+            #{profitOrder.memberid},
+            #{profitOrder.memberTitle},
+            #{profitOrder.monthNum},
+            #{profitOrder.sourceType}
+        )
+	</insert>
+
+    <!--auto generated Code-->
+    <insert id="insertSelective" useGeneratedKeys="true" keyProperty="profitOrder.id">
+        INSERT INTO profitorder
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="profitOrder.id!=null"> id,</if>
+            <if test="profitOrder.userID!=null"> userID,</if>
+            <if test="profitOrder.orderNo!=null"> orderNo,</if>
+            <if test="profitOrder.buyUserID!=null"> buyUserID,</if>
+            <if test="profitOrder.workID!=null"> workID,</if>
+            <if test="profitOrder.createTime!=null"> createTime,</if>
+            <if test="profitOrder.profit!=null"> profit,</if>
+            <if test="profitOrder.name!=null"> name,</if>
+            <if test="profitOrder.memberid!=null"> memberid,</if>
+            <if test="profitOrder.memberTitle!=null"> memberTitle,</if>
+            <if test="profitOrder.monthNum!=null"> monthNum,</if>
+            <if test="profitOrder.sourceType!=null"> sourceType</if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="profitOrder.id!=null"> #{profitOrder.id},</if>
+            <if test="profitOrder.userID!=null"> #{profitOrder.userID},</if>
+            <if test="profitOrder.orderNo!=null"> #{profitOrder.orderNo},</if>
+            <if test="profitOrder.buyUserID!=null"> #{profitOrder.buyUserID},</if>
+            <if test="profitOrder.workID!=null"> #{profitOrder.workID},</if>
+            <if test="profitOrder.createTime!=null"> #{profitOrder.createTime},</if>
+            <if test="profitOrder.profit!=null"> #{profitOrder.profit},</if>
+            <if test="profitOrder.name!=null"> #{profitOrder.name},</if>
+            <if test="profitOrder.memberid!=null"> #{profitOrder.memberid},</if>
+            <if test="profitOrder.memberTitle!=null"> #{profitOrder.memberTitle},</if>
+            <if test="profitOrder.monthNum!=null"> #{profitOrder.monthNum},</if>
+            <if test="profitOrder.sourceType!=null"> #{profitOrder.sourceType}</if>
+        </trim>
+	</insert>
+
+    <!--auto generated Code-->
+    <insert id="insertList">        INSERT INTO profitorder(
+        <include refid="Base_Column_List"/>
+        )VALUES
+        <foreach collection="profitOrders" item="profitOrder" index="index" separator=",">
+            (
+            #{profitOrder.id},
+            #{profitOrder.userID},
+            #{profitOrder.orderNo},
+            #{profitOrder.buyUserID},
+            #{profitOrder.workID},
+            #{profitOrder.createTime},
+            #{profitOrder.profit},
+            #{profitOrder.name},
+            #{profitOrder.memberid},
+            #{profitOrder.memberTitle},
+            #{profitOrder.monthNum},
+            #{profitOrder.sourceType}
+            )
+        </foreach>
+	</insert>
+
+    <!--auto generated Code-->
+    <update id="update">
+        UPDATE profitorder
+        <set>
+            <if test="profitOrder.id != null"> id = #{profitOrder.id},</if>
+            <if test="profitOrder.userID != null"> userID = #{profitOrder.userID},</if>
+            <if test="profitOrder.orderNo != null"> orderNo = #{profitOrder.orderNo},</if>
+            <if test="profitOrder.buyUserID != null"> buyUserID = #{profitOrder.buyUserID},</if>
+            <if test="profitOrder.workID != null"> workID = #{profitOrder.workID},</if>
+            <if test="profitOrder.createTime != null"> createTime = #{profitOrder.createTime},</if>
+            <if test="profitOrder.profit != null"> profit = #{profitOrder.profit},</if>
+            <if test="profitOrder.name != null"> name = #{profitOrder.name},</if>
+            <if test="profitOrder.memberid != null"> memberid = #{profitOrder.memberid},</if>
+            <if test="profitOrder.memberTitle != null"> memberTitle = #{profitOrder.memberTitle},</if>
+            <if test="profitOrder.monthNum != null"> monthNum = #{profitOrder.monthNum},</if>
+            <if test="profitOrder.sourceType != null"> sourceType = #{profitOrder.sourceType}</if>
+        </set>
+		WHERE id = #{profitOrder.id,jdbcType=BIGINT}
+    </update>
+
+    <select id="findProfitRecord" resultMap="DtoResultMap">
+        SELECT p.id,p.name,p.profit,p.sourceType,p.memberid,p.createTime,w.userName,w.userImg
+        FROM profitOrder p LEFT JOIN wxuser w on p.buyUserID=w.id
+        WHERE p.userid=#{id} ORDER BY p.id DESC
+        limit #{pageNo},#{pageSize}
+    </select>
+</mapper>
+

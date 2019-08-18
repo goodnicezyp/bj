@@ -1,0 +1,2 @@
+ALTER TABLE orderitem
+	ADD name VARCHAR(200) DEFAULT '' COMMENT 'name';

@@ -1,0 +1,480 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xkygame.ssm.dao.UserDao">
+
+    <resultMap id="UserBaseMap" type="com.xkygame.ssm.model.User" autoMapping="true">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="stateTime" property="stateTime" jdbcType="TIMESTAMP" />
+        <result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="lastLoginTime" property="lastLoginTime" jdbcType="TIMESTAMP" />
+        <result column="signTime" property="signTime" jdbcType="TIMESTAMP" />
+        <result column="memberTime" property="memberTime" jdbcType="TIMESTAMP" />
+        <result column="expireTime" property="expireTime" jdbcType="TIMESTAMP" />
+        <result column="birthDay" property="birthDay" jdbcType="TIMESTAMP" />
+        <result column="certifiedTime" property="certifiedTime" jdbcType="TIMESTAMP" />
+        <result column="certifiedUpdateTime" property="certifiedUpdateTime" jdbcType="TIMESTAMP" />
+        <result column="aptitudeTime" property="aptitudeTime" jdbcType="TIMESTAMP" />
+        <result column="aptitudeUpdateTime" property="aptitudeUpdateTime" jdbcType="TIMESTAMP" />
+        <result column="channelTime" property="channelTime" jdbcType="TIMESTAMP" />
+    </resultMap>
+    <resultMap id="DtoResultMap" type="com.xkygame.ssm.dto.UserDto" autoMapping="true">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="expireTime" property="expireTime" jdbcType="TIMESTAMP" />
+        <result column="birthDay" property="birthDay" jdbcType="TIMESTAMP" />
+        <result column="stateTime" property="stateTime" jdbcType="TIMESTAMP" />
+    </resultMap>
+    <resultMap id="SignedUserDtoMap" type="com.xkygame.ssm.dto.SignedUserDto" autoMapping="true">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="freeExpiredTime" property="freeExpiredTime" jdbcType="TIMESTAMP" />
+    </resultMap>
+    <resultMap id="RemandUserDtoMap" type="com.xkygame.ssm.dto.RemandUserDto" autoMapping="true">
+        <result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
+    </resultMap>
+
+    <insert id="createUser" parameterType="com.xkygame.ssm.model.User" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+        insert into
+        wxuser(userName,userImg,lastIP,signCode,iuserid,memberid,inviteCode,memberTime,expireTime,parentid,magnumOpus,createTime,lastLoginTime,
+        agentFlag,channelFlag,channelTime,channelCode,channelUserid,totalProfit,profit,miniOpenid,userOpenid,unionid,totalCare,totalFans,recommendFlag,works,state,stateTime,freeTime,
+        signType,professional,interest,userPhone,email,birthDay,company,remark,signTime,sex,
+        certifiedFlag,cardType,cardNo,realName,country,province,cardFrontPic,cardBackPic,cardHandPic,socialCreditCode,legalName,companyAddr,businessLicense,
+        certifiedState,certifiedTime,certifiedUpdateTime,certifiedUpdate_by,
+        aptitudeFlag,educational,industry,workDes,winDes,aptitudePic,aptitudeState,freeExpiredTime,
+        aptitudeTime,aptitudeUpdateTime,aptitudeUpdate_by,tradeFlag,tradeCode,descrip,recommandPic)
+        values
+        (#{userName},#{userImg},#{lastIP},#{signCode},#{iuserid},#{memberid},#{inviteCode},#{memberTime},#{expireTime},#{parentid},#{magnumOpus},
+        #{createTime},#{lastLoginTime},#{agentFlag},#{channelFlag},#{channelTime},#{channelCode},#{channelUserid},#{totalProfit},#{profit},#{miniOpenid},#{userOpenid},#{unionid},#{totalCare},#{totalFans},#{recommendFlag},
+        #{works},#{state},#{stateTime},#{freeTime},#{signType},#{professional},#{interest},#{userPhone},#{email},#{birthDay},#{company},#{remark},#{signTime},#{sex},
+        #{certifiedFlag},#{cardType},#{cardNo},#{realName},#{country},#{province},#{cardFrontPic},#{cardBackPic},#{cardHandPic},
+        #{socialCreditCode},#{legalName},#{companyAddr},#{businessLicense},#{certifiedState},
+        #{certifiedTime},#{certifiedUpdateTime},#{certifiedUpdate_by},#{aptitudeFlag},#{educational},#{industry},#{workDes},#{winDes},#{aptitudePic},
+        #{aptitudeState},#{freeExpiredTime},#{aptitudeTime},#{aptitudeUpdateTime},#{aptitudeUpdate_by},#{tradeFlag},#{tradeCode},#{descrip},#{recommandPic})
+    </insert>
+
+    <update id="updateUser" parameterType="com.xkygame.ssm.model.User">
+        update wxuser set
+        userName = #{userName},userImg = #{userImg},lastIP = #{lastIP},signCode=#{signCode},
+        iuserid = #{iuserid},memberid = #{memberid},inviteCode = #{inviteCode},memberTime=#{memberTime},
+        expireTime = #{expireTime},parentid = #{parentid},magnumOpus=#{magnumOpus},createTime = #{createTime},
+        lastLoginTime = #{lastLoginTime},agentFlag = #{agentFlag},channelFlag=#{channelFlag},
+        channelTime=#{channelTime},channelCode=#{channelCode},channelUserid=#{channelUserid},
+        totalProfit = #{totalProfit},
+        profit = #{profit},miniOpenid = #{miniOpenid},userOpenid = #{userOpenid},
+        unionid = #{unionid},totalCare = #{totalCare},totalFans = #{totalFans},
+        recommendFlag = #{recommendFlag},works=#{works},state=#{state},stateTime=#{stateTime},
+        freeTime=#{freeTime},signType=#{signType},professional=#{professional},interest=#{interest},
+        userPhone=#{userPhone},email=#{email},birthDay=#{birthDay},company=#{company},remark=#{remark},
+        signTime=#{signTime},sex=#{sex},certifiedFlag=#{certifiedFlag},cardType=#{cardType},cardNo=#{cardNo},
+        realName=#{realName},country=#{country},province=#{province},cardFrontPic=#{cardFrontPic},
+        cardBackPic=#{cardBackPic},cardHandPic=#{cardHandPic},certifiedState=#{certifiedState},certifiedTime=#{certifiedTime},
+        socialCreditCode=#{socialCreditCode},legalName=#{legalName},companyAddr=#{companyAddr},businessLicense=#{businessLicense},
+        certifiedUpdateTime=#{certifiedUpdateTime},certifiedUpdate_by=#{certifiedUpdate_by},aptitudeFlag=#{aptitudeFlag},
+        educational=#{educational},industry=#{industry},workDes=#{workDes},winDes=#{winDes},
+        aptitudePic=#{aptitudePic},aptitudeState=#{aptitudeState},aptitudeTime=#{aptitudeTime},
+        aptitudeUpdateTime=#{aptitudeUpdateTime},aptitudeUpdate_by=#{aptitudeUpdate_by},tradeFlag=#{tradeFlag},
+        tradeCode=#{tradeCode},descrip=#{descrip},recommandPic=#{recommandPic},freeExpiredTime=#{freeExpiredTime}
+        where id=#{id}
+    </update>
+
+    <select id="selectUserById" parameterType="java.lang.Long" resultMap="UserBaseMap">
+        SELECT * FROM wxuser WHERE id = #{userId}
+    </select>
+
+    <select id="findUserByMiniOpenid" resultMap="UserBaseMap">
+        SELECT * FROM wxuser WHERE miniOpenid = #{openid}
+    </select>
+
+    <select id="selectUserByUnionid" resultType="com.xkygame.ssm.model.User">
+        SELECT * FROM wxuser WHERE unionid = #{unionid}
+    </select>
+
+    <select id="findBySignCode" resultType="com.xkygame.ssm.model.User">
+        SELECT * FROM wxuser WHERE signCode = #{signCode}
+    </select>
+
+    <select id="findUserByPage" resultMap="UserBaseMap">
+      SELECT * FROM wxuser
+        <where>
+            <if test="map.orderFlag == 4">recommendFlag = 1</if>
+        </where>
+        <choose>
+            <when test="map.orderFlag == null"> ORDER BY id DESC </when>
+            <otherwise>
+                <if test="map.orderFlag == 2 or map.orderFlag == 4"> ORDER BY totalFans DESC </if>
+            </otherwise>
+        </choose>
+    </select>
+
+    <select id="searchUser" resultType="com.xkygame.ssm.dto.UserDto">
+      SELECT * FROM wxuser WHERE LOWER (userName) like LOWER (#{key}) ORDER BY totalFans DESC
+      limit #{pageNo},#{pageSize}
+    </select>
+
+    <update id="updateTotalCare">
+        UPDATE wxuser SET
+        <if test="flag > 0">totalCare = totalCare + 1</if>
+        <if test="flag == 0">totalCare = totalCare - 1</if>
+        WHERE id = #{id}
+    </update>
+
+    <update id="updateTotalFans">
+        UPDATE wxuser SET
+        <if test="flag > 0">totalFans = totalFans + 1</if>
+        <if test="flag == 0">totalFans = totalFans - 1</if>
+        WHERE id = #{id}
+    </update>
+
+    <select id="searchUserByPage" resultMap="UserBaseMap" parameterType="hashMap">
+        SELECT * FROM wxuser
+        <where>
+            <if test="map.searchVal!=null and map.searchVal!='' or map.searchVal==0">
+            LOWER (concat(id,userName,ifnull(inviteCode,''),ifnull(channelCode,''),ifnull(signCode,''))) LIKE LOWER (#{map.searchVal})
+            </if>
+            <if test="map.examine != -2">AND (certifiedState = #{map.examine} or aptitudeState =#{map.examine})</if>
+            <if test="map.memberid!=null and map.memberid>0">AND memberid=#{map.memberid}</if>
+            <if test="map.memberid!=null and map.memberid==0">AND memberid>0</if>
+            <if test="map.type != null and map.type == 0">
+              AND (certifiedFlag>0 or memberid != 0 or channelFlag > 0)
+                <if test="map.iuserid != null"> and (iuserid = #{map.iuserid} or parentid = #{map.iuserid}) or channelUserid = #{map.iuserid}</if>
+            </if>
+            <if test="map.type != null and map.type == 1">
+                AND certifiedFlag>0
+                <if test="map.iuserid != null"> and iuserid = #{map.iuserid}</if>
+            </if>
+            <if test="map.type != null and map.type == 2">
+                AND memberid != 0
+                <if test="map.iuserid != null"> and parentid = #{map.iuserid}</if>
+            </if>
+            <if test="map.type != null and map.type == 3">
+                AND channelFlag > 0
+                <if test="map.iuserid != null"> and channelUserid = #{map.iuserid}</if>
+            </if>
+            <if test="map.userid!=null and map.userid!='' or map.userid==0">AND id=#{map.userid}</if>
+        </where>
+        ORDER BY id DESC
+        limit #{pageNo},#{pageSize}
+    </select>
+
+    <select id="total" resultType="java.lang.Integer">
+        SELECT COUNT(1) from
+        (
+            SELECT id FROM wxuser
+            <where>
+                <if test="map.searchVal!=null and map.searchVal!='' or map.searchVal==0">
+                    LOWER (concat(id,userName,ifnull(inviteCode,''),ifnull(channelCode,''),ifnull(signCode,''))) LIKE LOWER (#{map.searchVal})
+                 </if>
+                <if test="map.examine != -2">AND (certifiedState = #{map.examine} or aptitudeState =#{map.examine})</if>
+                <if test="map.memberid!=null and map.memberid>0">AND memberid=#{map.memberid}</if>
+                <if test="map.memberid!=null and map.memberid==0">AND memberid>0</if>
+                <if test="map.type != null and map.type == 0">
+                    AND (certifiedFlag>0 or memberid != 0 or channelFlag > 0)
+                    <if test="map.iuserid != null"> and (iuserid = #{map.iuserid} or parentid = #{map.iuserid}) or channelUserid = #{map.iuserid}</if>
+                </if>
+                <if test="map.type != null and map.type == 1">
+                    AND certifiedFlag>0
+                    <if test="map.iuserid != null"> and iuserid = #{map.iuserid}</if>
+                </if>
+                <if test="map.type != null and map.type == 2">
+                    AND memberid != 0
+                    <if test="map.iuserid != null"> and parentid = #{map.iuserid}</if>
+                </if>
+                <if test="map.type != null and map.type == 3">
+                    AND channelFlag > 0
+                    <if test="map.iuserid != null"> and channelUserid = #{map.iuserid}</if>
+                </if>
+                <if test="map.userid!=null and map.userid!='' or map.userid==0">AND id=#{map.userid}</if>
+            </where>
+        )t
+    </select>
+
+    <select id="countTotalPageView" resultType="java.math.BigDecimal">
+      SELECT count(id) from wxuser
+    </select>
+
+    <select id="countCurPageView" resultType="java.math.BigDecimal">
+      SELECT count(id) from wxuser WHERE date_format(lastLoginTime,'%y-%m-%d')=date_format(DATE_SUB(curdate(), INTERVAL 0 DAY),'%y-%m-%d')
+    </select>
+
+    <select id="countUsersByDay" resultType="com.xkygame.ssm.dto.CountDataDto">
+        select v.dateTime,ifnull(b.amount,0) as totalNum from past_30_day_view v
+        left join
+            <if test="type == 0"> (select id, DATE_FORMAT(lastLoginTime,'%Y-%m-%d') as dateTime ,count(id) as amount </if>
+            <if test="type == 1"> (select id, DATE_FORMAT(signTime,'%Y-%m-%d') as dateTime ,count(id) as amount </if>
+            <if test="type == 2"> (select id, DATE_FORMAT(memberTime,'%Y-%m-%d') as dateTime ,count(id) as amount </if>
+            <if test="type == 3"> (select id, DATE_FORMAT(channelTime,'%Y-%m-%d') as dateTime ,count(id) as amount </if>
+        from wxuser
+        where
+            <if test="type == 0"> DATE_FORMAT(lastLoginTime,'%Y-%m-%d')> </if>
+            <if test="type == 1"> DATE_FORMAT(signTime,'%Y-%m-%d')> </if>
+            <if test="type == 2">memberid=#{memberid} and DATE_FORMAT(memberTime,'%Y-%m-%d')> </if>
+            <if test="type == 3"> DATE_FORMAT(channelTime,'%Y-%m-%d')> </if>
+        DATE_FORMAT(date_sub(curdate(), interval 30 day),'%Y-%m-%d')
+        GROUP BY dateTime
+            <if test="type == 0"> ORDER BY lastLoginTime ASC)b </if>
+            <if test="type == 1"> ORDER BY signTime ASC)b </if>
+            <if test="type == 2"> ORDER BY memberTime ASC)b </if>
+            <if test="type == 3"> ORDER BY channelTime ASC)b </if>
+        ON v.dateTime=b.dateTime GROUP BY v.dateTime
+    </select>
+    <select id="countUsersByMonth" resultType="com.xkygame.ssm.dto.CountDataDto">
+        select v.dateTime,ifnull(b.amount,0) as totalNum
+        from past_12_month_view v
+        left join
+        <if test="type == 0"> (select id, DATE_FORMAT(lastLoginTime,'%Y-%m') as dateTime ,count(id) as amount </if>
+        <if test="type == 1"> (select id, DATE_FORMAT(signTime,'%Y-%m') as dateTime ,count(id) as amount </if>
+        <if test="type == 2"> (select id, DATE_FORMAT(memberTime,'%Y-%m') as dateTime ,count(id) as amount </if>
+        <if test="type == 3"> (select id, DATE_FORMAT(channelTime,'%Y-%m') as dateTime ,count(id) as amount </if>
+        from wxuser
+        where
+        <if test="type == 0"> DATE_FORMAT(lastLoginTime,'%Y-%m')> </if>
+        <if test="type == 1"> DATE_FORMAT(signTime,'%Y-%m')> </if>
+        <if test="type == 2">memberid=#{memberid} and DATE_FORMAT(memberTime,'%Y-%m')> </if>
+        <if test="type == 3"> DATE_FORMAT(channelTime,'%Y-%m')> </if>
+        DATE_FORMAT(date_sub(curdate(), interval 12 month),'%Y-%m')
+        GROUP BY dateTime
+        <if test="type == 0"> ORDER BY lastLoginTime ASC)b </if>
+        <if test="type == 1"> ORDER BY signTime ASC)b </if>
+        <if test="type == 2"> ORDER BY memberTime ASC)b </if>
+        <if test="type == 3"> ORDER BY channelTime ASC)b </if>
+        ON v.dateTime=b.dateTime GROUP BY v.dateTime
+    </select>
+    <select id="countUsersByYear" resultType="com.xkygame.ssm.dto.CountDataDto">
+        select v.dateTime,ifnull(b.amount,0) as totalNum
+         from past_5_year_view v
+        left join
+        <if test="type == 0"> (select id, DATE_FORMAT(lastLoginTime,'%Y') as dateTime ,count(id) as amount </if>
+        <if test="type == 1"> (select id, DATE_FORMAT(signTime,'%Y') as dateTime ,count(id) as amount </if>
+        <if test="type == 2"> (select id, DATE_FORMAT(memberTime,'%Y') as dateTime ,count(id) as amount </if>
+        <if test="type == 3"> (select id, DATE_FORMAT(channelTime,'%Y') as dateTime ,count(id) as amount </if>
+        from wxuser
+        where
+        <if test="type == 0"> DATE_FORMAT(lastLoginTime,'%Y')> </if>
+        <if test="type == 1"> DATE_FORMAT(signTime,'%Y')> </if>
+        <if test="type == 2">memberid=#{memberid} and DATE_FORMAT(memberTime,'%Y')> </if>
+        <if test="type == 3"> DATE_FORMAT(channelTime,'%Y')> </if>
+
+        DATE_FORMAT(date_sub(curdate(), interval 5 year),'%Y')
+        GROUP BY dateTime
+        <if test="type == 0"> ORDER BY lastLoginTime ASC)b </if>
+        <if test="type == 1"> ORDER BY signTime ASC)b </if>
+        <if test="type == 2"> ORDER BY memberTime ASC)b </if>
+        <if test="type == 3"> ORDER BY channelTime ASC)b </if>
+        ON v.dateTime=b.dateTime GROUP BY v.dateTime
+    </select>
+
+    <select id="countMemberNum" resultType="java.math.BigDecimal">
+        SELECT count(id) FROM wxuser where memberid = #{memberid}
+        <if test="flag == 1">
+            AND DATE_FORMAT(memberTime,'%Y-%m-%d')=DATE_FORMAT(date_sub(curdate(), interval 0 day),'%Y-%m-%d')
+        </if>
+    </select>
+
+    <update id="updateRecommendFlag">
+        UPDATE wxuser SET recommendFlag=#{recommendFlag},descrip=#{descrip},recommandPic=#{recommandPic} WHERE id=#{id}
+    </update>
+
+    <update id="updateState">
+        UPDATE wxuser SET state=#{state},stateTime=#{date} WHERE id=#{id}
+    </update>
+
+    <select id="findByInviteCode" resultType="com.xkygame.ssm.model.User">
+        SELECT * FROM wxuser WHERE inviteCode=#{code}
+    </select>
+
+    <update id="updateChannel" parameterType="Collection">
+        <foreach collection="list" item="user" index="index" open="" close="" separator=";">
+        UPDATE wxuser SET channelFlag = #{state},channelTime=#{channelTime}
+        <if test="user.channelCode != null">,channelCode = #{user.channelCode}</if>
+        <if test="user.channelProfit != null">,channelProfit = #{user.channelProfit}</if>
+          WHERE id = #{user.id}
+        </foreach>
+    </update>
+
+    <update id="addFreeTime">
+        UPDATE wxuser SET freeTime = freeTime + #{num} WHERE id
+          <if test="iuserid == 0"> = #{userid} AND certifiedFlag &lt; 1</if>
+          <if test="iuserid != 0">IN (#{userid},#{iuserid})</if>
+    </update>
+
+    <update id="updateMemberExpired">
+        UPDATE wxuser SET memberid=-1 WHERE id=#{id}
+    </update>
+
+    <select id="getUserInfo" resultMap="DtoResultMap">
+        SELECT * FROM wxuser WHERE id=#{id}
+    </select>
+
+    <update id="updateInterest">
+        UPDATE wxuser SET interest=#{interest} WHERE id=#{id}
+    </update>
+    <update id="updateProfessional">
+        UPDATE wxuser SET professional=#{professional} WHERE id=#{id}
+    </update>
+
+    <update id="reduceFreeTime">
+        UPDATE wxuser SET freeTime = freeTime - 1 WHERE id=#{id}
+    </update>
+
+    <update id="addProfit">
+        update wxuser set profit = profit + #{price},totalProfit = totalProfit + #{price} WHERE id=#{userid}
+    </update>
+
+    <update id="updateExamine">
+        UPDATE wxuser SET
+        <if test="type == 0">certifiedState = #{examine},certifiedUpdateTime = #{date},certifiedUpdate_by=#{userName}</if>
+        <if test="type == 1">aptitudeState = #{examine},aptitudeUpdateTime = #{date},aptitudeUpdate_by=#{userName}</if>
+        WHERE id=#{id}
+    </update>
+
+    <select id="findByTradeCode" resultType="com.xkygame.ssm.model.User">
+        SELECT * FROM wxuser WHERE tradeCode=#{tradeCode}
+    </select>
+
+    <update id="updateTradeFlag">
+        UPDATE wxuser SET tradeFlag=#{tradeFlag},tradeCode=#{tradeCode} WHERE id=#{id}
+    </update>
+
+    <update id="reduceProfit">
+        UPDATE wxuser SET profit = profit - #{price} WHERE id=#{id}
+    </update>
+    <update id="updateMagnumOpus">
+        UPDATE wxuser SET magnumOpus = #{magnumOpus} WHERE id=#{id}
+    </update>
+
+    <select id="countTotalMember" resultType="java.math.BigDecimal">
+        SELECT count(1) from(SELECT id FROM wxuser WHERE memberid =1
+        UNION ALL SELECT id from wxuser WHERE memberid = 2)a
+    </select>
+    <select id="countCurMember" resultType="java.math.BigDecimal">
+        SELECT count(1) from(
+            SELECT id FROM wxuser WHERE memberid =1
+            AND date_format(memberTime,'%y-%m-%d')=date_format(DATE_SUB(curdate(), INTERVAL 0 DAY),'%y-%m-%d')
+            UNION ALL
+            SELECT id from wxuser WHERE memberid = 2
+            AND date_format(memberTime,'%y-%m-%d')=date_format(DATE_SUB(curdate(), INTERVAL 0 DAY),'%y-%m-%d')
+        )a
+    </select>
+
+
+    <select id="findSignedUser" resultMap="SignedUserDtoMap">
+        SELECT w.id,w.freeTime,w.diskSpace,w.freeExpiredTime,w.userPhone,w.miniOpenid,w.realName,count(w1.id) as gainTime
+        FROM wxuser w left join wxuser w1 on w.id= w1.iuserid
+        WHERE w.signType > 0 and w.freeTime > 0 GROUP BY w.id;
+    </select>
+    <select id="findRecommandUser" resultMap="RemandUserDtoMap">
+        SELECT id,userImg,totalFans,professional,memberid,magnumOpus,if(realName='',company,realName) as realName,
+        createTime,remark,descrip,recommandPic,userName
+         from wxuser
+        <where>
+            <if test="orderFlag == 4">recommendFlag = 1</if>
+        </where>
+          ORDER BY totalFans DESC
+        <if test="orderFlag == 2">limit 10</if>
+    </select>
+
+    <update id="cleanFreeTime" parameterType="java.util.List">
+        <foreach collection="list" item="user" index="index" open="" close="" separator=";">
+            UPDATE wxuser SET freeTime = freeTime - #{user.gainTime} WHERE id=#{user.id}
+        </foreach>
+    </update>
+
+    <update id="reduceDiskSpace">
+        UPDATE wxuser SET diskSpace = diskSpace - #{fileSize} WHERE id=#{id}
+    </update>
+
+    <update id="addDiskSpace">
+        UPDATE wxuser SET
+        <if test="firstFlag != 2">totalDiskSpace = totalDiskSpace + #{num},</if>
+        diskSpace = diskSpace + #{num}
+        WHERE id=#{id}
+        <if test="firstFlag == 1"> AND totalDiskSpace = 0</if>
+    </update>
+    <update id="updateSignType">
+        UPDATE wxuser SET
+        signType=#{signType},certifiedFlag=-1,certifiedState=-1,aptitudeFlag=-1,aptitudeState=-1
+         WHERE id=#{id}
+    </update>
+
+    <select id="countTotalSignd" resultType="java.math.BigDecimal">
+        SELECT count(1) FROM wxuser WHERE signType > 0
+    </select>
+    <select id="countCurSigned" resultType="java.math.BigDecimal">
+        SELECT count(1) FROM wxuser WHERE signType > 0
+        AND date_format(signTime,'%y-%m-%d')=date_format(DATE_SUB(curdate(), INTERVAL 0 DAY),'%y-%m-%d')
+    </select>
+    <select id="countTotalChanel" resultType="java.math.BigDecimal">
+        SELECT count(1) FROM wxuser WHERE agentFlag = 1
+    </select>
+    <select id="countCurChanel" resultType="java.math.BigDecimal">
+      SELECT count(1) FROM wxuser WHERE agentFlag = 1
+      AND date_format(channelTime,'%y-%m-%d')=date_format(DATE_SUB(curdate(), INTERVAL 0 DAY),'%y-%m-%d')
+    </select>
+
+    <update id="updateMember" parameterType="java.util.List">
+        <foreach collection="list" item="user" index="index" open="" close="" separator=";">
+            UPDATE wxuser SET memberid = #{state}
+            <if test="state == 1">
+                ,inviteCode = #{user.inviteCode},totalDiskSpace = totalDiskSpace + 2097152
+                ,diskSpace = diskSpace + 2097152,expireTime=#{user.expireTime},memberTime=#{user.memberTime}
+            </if>
+            <if test="state == 2">
+                ,inviteCode = #{user.inviteCode},totalDiskSpace = totalDiskSpace + 5242880
+                ,diskSpace = diskSpace + 5242880,expireTime=#{user.expireTime},memberTime=#{user.memberTime}
+            </if>
+            WHERE id = #{user.id}
+        </foreach>
+    </update>
+    <update id="addWorkNum">
+        UPDATE wxuser SET works = works + 1 WHERE id=#{userid}
+    </update>
+    <update id="updateWorks">
+        UPDATE wxuser SET works = #{num} WHERE id=#{id}
+    </update>
+    <update id="updateAgent" parameterType="Collection">
+        UPDATE wxuser SET agentFlag = #{state},agentTime=#{agentTime} WHERE id IN
+        <foreach collection="idArr" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </update>
+    <select id="findByChannelCode" resultType="com.xkygame.ssm.model.User">
+        SELECT * FROM wxuser WHERE channelCode = #{code} AND channelFlag > 0
+    </select>
+
+    <update id="updateParentid">
+        UPDATE wxuser SET parentid = #{iuserID} WHERE id=#{id}
+    </update>
+    <update id="updateChannelUserid">
+        UPDATE wxuser SET channelUserid = #{iuserID} WHERE id=#{id}
+    </update>
+
+    <select id="countTotalInvite" resultType="java.math.BigDecimal">
+        SELECT count(1) FROM wxuser WHERE iuserid>0
+        <if test="flag == 1">
+            AND date_format(certifiedTime,'%y-%m-%d')=date_format(DATE_SUB(curdate(), INTERVAL 0 DAY),'%y-%m-%d')
+        </if>
+    </select>
+    <select id="countTotalParentid" resultType="java.math.BigDecimal">
+        SELECT count(1) FROM wxuser WHERE parentid>0
+        <if test="flag == 1">
+            AND date_format(memberTime,'%y-%m-%d')=date_format(DATE_SUB(curdate(), INTERVAL 0 DAY),'%y-%m-%d')
+        </if>
+    </select>
+    <select id="countTotalChannel" resultType="java.math.BigDecimal">
+        SELECT count(1) FROM wxuser WHERE channelUserid>0
+        <if test="flag == 1">
+            AND date_format(memberTime,'%y-%m-%d')=date_format(DATE_SUB(curdate(), INTERVAL 0 DAY),'%y-%m-%d')
+        </if>
+    </select>
+
+    <select id="countUserRank" resultType="com.xkygame.ssm.dto.UserRank">
+        select a.* FROM(
+            select w.id,w.userName,w.userImg,count(w1.id) as countNum,if(w.realName='',w.company,w.realName) as realName
+            FROM wxuser w left join wxuser w1 on
+            <if test="type == 1">w.id=w1.iuserid</if>
+            <if test="type == 2">w.id=w1.parentid</if>
+            <if test="type == 3">w.id=w1.channelUserid</if>
+            GROUP BY w.id
+        )a
+        WHERE a.countNum>0 ORDER BY a.countNum DESC limit 50;
+    </select>
+
+</mapper>

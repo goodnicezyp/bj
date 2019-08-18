@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xkygame.ssm.dao.CategoryDao">
+
+    <resultMap id="CategoryBaseMap" type="com.xkygame.ssm.model.Category" autoMapping="true">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+    </resultMap>
+
+    <insert id="create" parameterType="com.xkygame.ssm.model.Category" useGeneratedKeys="true" keyProperty="id">
+        insert into
+        category(name,parentid,parentName,depth,status,projectFileType,prefix,type)
+        values
+        (#{name},#{parentid},#{parentName},#{depth},#{status},#{projectFileType},#{prefix},#{type})
+    </insert>
+
+    <update id="update" parameterType="com.xkygame.ssm.model.Category">
+        update category set
+        name = #{name},parentid = #{parentid},parentName = #{parentName},depth=#{depth},status = #{status},
+        projectFileType=#{projectFileType},prefix=#{prefix},type=#{type}
+        where id=#{id}
+    </update>
+
+    <select id="findAll" resultType="com.xkygame.ssm.model.Category">
+        select * from category where status = 1
+         <if test="eduPackage == 1">AND type != 0</if>
+         order by id ASC
+    </select>
+
+    <select id="selectAllCategories" resultMap="CategoryBaseMap">
+        select * from category where status = 1 order by id desc
+    </select>
+
+    <select id="findAllByPage" resultMap="CategoryBaseMap">
+        SELECT * FROM category where status = 1
+        <if test="map.id != null and map.id > 0">AND id=#{map.id}</if>
+        ORDER BY id DESC limit #{pageNo},#{pageSize}
+    </select>
+
+    <select id="total" resultType="java.lang.Integer">
+        SELECT count(1) FROM (
+        SELECT id FROM category where status = 1
+        <if test="map.id != null and map.id > 0">AND id=#{map.id}</if>
+        )t
+    </select>
+
+    <select id="selectCategoryById" resultType="com.xkygame.ssm.model.Category">
+        select * from category where id=#{id}
+    </select>
+
+    <delete id="delCategoryByIds" parameterType="Collection">
+        DELETE FROM category WHERE id IN
+        <foreach collection="idArr" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+
+    <select id="findAllForCount" resultType="com.xkygame.ssm.model.Category">
+        select * from category where status = 1
+         <if test="cateid > 0">AND id = #{cateid}</if>
+         order by id ASC
+    </select>
+
+
+</mapper>

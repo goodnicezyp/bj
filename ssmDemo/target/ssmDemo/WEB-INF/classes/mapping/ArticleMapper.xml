@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xkygame.ssm.dao.ArticleDao">
+
+    <resultMap id="ArticleBaseMap" type="com.xkygame.ssm.model.Articles" autoMapping="true">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="createTime" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <insert id="create" parameterType="com.xkygame.ssm.model.Articles" useGeneratedKeys="true" keyProperty="id">
+        insert into
+        articles(title,content,picUrl,createTime,updateTime,updateBy,type,state,pushTime)
+        values
+        (#{title},#{content},#{picUrl},#{createTime},#{updateTime},#{updateBy},#{type},#{state},#{pushTime})
+    </insert>
+
+    <update id="update" parameterType="com.xkygame.ssm.model.Articles">
+        update articles set
+        title = #{title},content = #{content},picUrl = #{picUrl},createTime=#{createTime},
+        updateTime = #{updateTime},updateBy=#{updateBy},type=#{type},state=#{state},pushTime=#{pushTime}
+        where id=#{id}
+    </update>
+
+    <select id="findAllByPage" resultMap="ArticleBaseMap">
+        SELECT * FROM articles
+         <where>
+             state = 1
+             <if test="map.orderFlag == 6">AND type = 0</if>
+             <if test="map.orderFlag == 7">AND type = 1</if>
+             <if test="map.orderFlag == 8">AND type = 2</if>
+             <if test="map.orderFlag == 9">AND type = 3</if>
+             <if test="map.searchVal != null and map.searchVal != ''">AND LOWER (title) LIKE LOWER (#{map.searchVal})</if>
+         </where>
+        ORDER BY id DESC limit #{pageNo},#{pageSize}
+    </select>
+
+    <select id="total" resultType="java.lang.Integer">
+        SELECT count(1) from articles
+        <where>
+            state = 1
+            <if test="map.searchVal != null and map.searchVal != ''">AND LOWER (title) LIKE LOWER (#{map.searchVal})</if>
+        </where>
+    </select>
+
+    <delete id="delByIds" parameterType="Collection">
+        UPDATE articles SET state = -2 WHERE id IN
+        <foreach collection="idArr" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+
+    <select id="findByID" resultType="com.xkygame.ssm.model.Articles">
+        SELECT * FROM articles WHERE id=#{id}
+    </select>
+
+    <update id="updateState">
+        UPDATE articles SET state=#{state} WHERE id=#{id}
+    </update>
+    <update id="pushArticle">
+        UPDATE articles SET state=#{state},updateTime=#{date},updateBy=#{updateBy} WHERE id=#{id}
+    </update>
+
+</mapper>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xkygame.ssm.dao.CollectionDao">
+
+    <resultMap id="CollectionBaseMap" type="com.xkygame.ssm.model.Collections" autoMapping="true">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP" />
+    </resultMap>
+
+    <resultMap id="worksDtoMap" type="com.xkygame.ssm.dto.WorkDto" autoMapping="true">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
+    </resultMap>
+
+    <insert id="create" parameterType="com.xkygame.ssm.model.Collections" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO collections(userid,workid,state,createTime,updateTime)
+         VALUES (#{userid},#{workid},#{state},#{createTime},#{updateTime})
+    </insert>
+
+    <update id="update" parameterType="com.xkygame.ssm.model.Collections">
+        UPDATE collections SET
+        userid=#{userid},workid=#{workid},state=#{state},
+        createTime=#{createTime},updateTime=#{updateTime}
+        WHERE id=#{id}
+    </update>
+
+    <select id="findByUserid" resultMap="worksDtoMap">
+        SELECT w.* FROM collections a LEFT JOIN work w on w.id=a.workid
+        WHERE a.userid=#{userid} and state=1 ORDER BY a.id DESC limit #{pageNo},#{pageSize}
+    </select>
+
+    <select id="findByUseridAndWorkid" resultMap="CollectionBaseMap">
+        SELECT * FROM collections WHERE userid=#{userid} AND workid=#{workid} and state=1
+    </select>
+
+    <select id="findCollect" resultMap="CollectionBaseMap">
+        SELECT * FROM collections WHERE userid=#{userid} AND workid=#{workid}
+    </select>
+
+
+</mapper>

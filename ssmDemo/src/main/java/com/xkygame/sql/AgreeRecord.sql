@@ -1,0 +1,12 @@
+-- auto Generated on 2019-04-24 17:56:09 
+-- DROP TABLE IF EXISTS agreeRecord; 
+CREATE TABLE agreeRecord(
+	id BIGINT (11) NOT NULL AUTO_INCREMENT COMMENT 'id',
+	sourceType INT (2) NOT NULL DEFAULT 0 COMMENT '所属类型 0：会员权益文案 1:帮助文档 2：关于',
+	userid BIGINT (11) NOT NULL DEFAULT 0 COMMENT 'userid',
+	userName VARCHAR (200) NOT NULL DEFAULT '' COMMENT 'userName',
+	userImg VARCHAR (200) NOT NULL DEFAULT '' COMMENT 'userImg',
+	createTime DATETIME NOT NULL DEFAULT '1000-01-01 00:00:00' COMMENT 'createTime',
+	INDEX(userid),
+	PRIMARY KEY (id)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT 'agreeRecord';

@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xkygame.ssm.dao.AdminDao">
+
+    <resultMap id="AdminBaseMap" type="com.xkygame.ssm.model.Admin" autoMapping="true">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="createTime" property="createTime" jdbcType="TIMESTAMP"/>
+        <collection property="roleList" ofType="com.xkygame.ssm.model.Role" autoMapping="true">
+            <id column="rid" property="id" jdbcType="BIGINT"/>
+            <collection property="permissionList" ofType="com.xkygame.ssm.model.Permission">
+                <id column="pid" property="pid" jdbcType="BIGINT"/>
+                <result column="pname" property="name" jdbcType="VARCHAR"/>
+                <result column="action" property="action" jdbcType="VARCHAR"/>
+            </collection>
+        </collection>
+    </resultMap>
+
+    <resultMap id="AdminMap" type="com.xkygame.ssm.model.Admin" autoMapping="true">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <collection property="roleList" ofType="com.xkygame.ssm.model.Role">
+            <id column="rid" property="id" jdbcType="BIGINT"/>
+            <result column="name" property="name" jdbcType="VARCHAR"/>
+            <result column="rolecode" property="rolecode" jdbcType="VARCHAR"/>
+        </collection>
+    </resultMap>
+
+    <insert id="create" parameterType="com.xkygame.ssm.model.Admin" useGeneratedKeys="true" keyProperty="id">
+        insert into
+        admin(adminName,adminPwd,flag,createTime,phone,email,sex,remark,roleid)
+        values
+        (#{adminName},#{adminPwd},#{flag},#{createTime},#{phone},#{email},#{sex},#{remark},#{roleid})
+    </insert>
+
+    <update id="update" parameterType="com.xkygame.ssm.model.Admin">
+        update admin set adminPwd = #{adminPwd},adminName = #{adminName},flag = #{flag},
+        createTime=#{createTime},phone=#{phone},email=#{email},sex=#{sex},remark=#{remark},roleid=#{roleid} where id = #{id}
+    </update>
+
+    <delete id="delete" parameterType="java.lang.Long">
+        delete from admin where id = #{adminid}
+    </delete>
+
+    <select id="selectAdmin" resultMap="AdminMap">
+        select
+            a.*,
+            r.id as rid,
+            r.name as name,
+            r.rolecode as rolecode
+        from
+            admin a,
+            role r,
+            adminrole ar
+        where
+          a.id=ar.adminid
+        and
+          r.id=ar.roleid
+        <if test="map.searchVal != null and map.searchVal != ''">AND LOWER (adminName) LIKE LOWER (#{map.searchVal})</if>
+           order by id desc
+        limit #{pageNo},#{pageSize}
+    </select>
+
+    <select id="total" resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM admin
+    </select>
+
+    <select id="getAdminByName" resultMap="AdminBaseMap">
+        select
+            a.id,
+            a.adminName,
+            a.adminPwd,
+            r.id as rid,
+            r.name as name,
+            r.rolecode as rolecode,
+            p.pid as pid,
+            p.name as pname,
+            p.action as action
+        from
+            admin a,
+            role r,
+            adminrole ar,
+            permission p,
+            rolepermission rp
+        where
+          a.id=ar.adminid
+        and
+          r.id=ar.roleid
+        and
+          rp.roleid=r.id
+        and
+          rp.permissionid=p.pid
+        and
+          a.adminName = #{name}
+    </select>
+
+    <select id="findAdminById" resultMap="AdminMap">
+        SELECT * from admin WHERE id = #{id}
+    </select>
+
+    <delete id="deleteByAdminIds">
+        delete from Admin where id in
+        <foreach collection="idArr" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+
+</mapper>

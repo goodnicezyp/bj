@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xkygame.ssm.dao.WorkLikedDao">
+
+    <resultMap id="WorkLikedBaseMap" type="com.xkygame.ssm.model.WorkLiked" autoMapping="true">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="createTime" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <insert id="create" parameterType="com.xkygame.ssm.model.WorkLiked" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO workLiked(workid,userid,state,createTime,update_by,updateTime)
+        VALUES (#{workid},#{userid},#{state},#{createTime},#{update_by},#{updateTime})
+    </insert>
+
+    <update id="update" parameterType="com.xkygame.ssm.model.WorkLiked">
+        UPDATE workLiked SET workid=#{workid},userid=#{userid},state=#{state},
+        createTime=#{createTime},update_by=#{update_by},updateTime=#{updateTime}
+        where id =#{id}
+    </update>
+
+    <select id="findLiked" resultMap="WorkLikedBaseMap">
+        SELECT * FROM workLiked WHERE userid=#{userid} and workid=#{workid}
+    </select>
+
+    <select id="findByUserid" resultMap="WorkLikedBaseMap">
+        SELECT wk.id,wk.workid,wk.userid as iuserid,wo.url as workPic,
+        wo.type,w.userName,w.userImg FROM workLiked wk
+        LEFT JOIN wxuser w on wk.userid=w.id
+        LEFT JOIN works wo on wo.id=wk.workid
+        WHERE wk.userid=#{id}
+        ORDER wk.createTime DESC
+        limit #{pageNo},#{pageSize}
+    </select>
+
+</mapper>

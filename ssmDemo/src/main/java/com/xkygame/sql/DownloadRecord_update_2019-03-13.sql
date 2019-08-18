@@ -1,0 +1,9 @@
+ALTER TABLE downloadrecord
+	ADD userid BIGINT(11) NOT NULL DEFAULT 0 COMMENT 'userid';ALTER TABLE downloadrecord
+	ADD workid BIGINT(11) NOT NULL DEFAULT 0 COMMENT 'workid';ALTER TABLE downloadrecord
+	ADD name VARCHAR(200) NOT NULL DEFAULT '' COMMENT 'name';ALTER TABLE downloadrecord
+	ADD authorID BIGINT(11) NOT NULL DEFAULT 0 COMMENT 'authorID';ALTER TABLE downloadrecord
+	ADD coverPic VARCHAR(200) NOT NULL DEFAULT '' COMMENT 'coverPic';
+ALTER TABLE downloadrecord ADD type INT(2) NOT NULL DEFAULT 0 COMMENT 'type';
+ALTER TABLE downloadrecord ADD cateid BIGINT(2) NOT NULL DEFAULT 0 COMMENT 'cateid';
+ALTER TABLE downloadrecord ADD cateName VARCHAR(100) NOT NULL DEFAULT '' COMMENT 'cateName';

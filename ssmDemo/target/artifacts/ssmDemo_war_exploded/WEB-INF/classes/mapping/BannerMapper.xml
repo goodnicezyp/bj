@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xkygame.ssm.dao.BannerDao">
+
+    <resultMap id="BannerBaseMap" type="com.xkygame.ssm.model.Banner" autoMapping="true">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
+    </resultMap>
+
+    <insert id="create" parameterType="com.xkygame.ssm.model.Banner" useGeneratedKeys="true" keyProperty="id">
+        insert into banner(title, picUrl, createTime, link,pagePath, type, flag)
+        values (#{title},#{picUrl},#{createTime},#{link},#{pagePath},#{type},#{flag})
+    </insert>
+
+    <update id="update" parameterType="com.xkygame.ssm.model.Banner">
+        update banner set
+        title = #{title},
+        picUrl = #{picUrl},
+        createTime = #{createTime},
+        link = #{link},
+        pagePath=#{pagePath},
+        type = #{type},
+        flag = #{flag}
+        where id= #{id}
+    </update>
+
+    <select id="selectAllBanners" resultMap="BannerBaseMap">
+        SELECT * FROM banner where flag = 1 and type = #{type} order by id ASC
+    </select>
+
+    <select id="selectById" resultMap="BannerBaseMap">
+        SELECT * FROM banner where id = #{bannerId}
+    </select>
+
+    <select id="findAllBannerByPage" resultMap="BannerBaseMap" parameterType="java.lang.Integer">
+        select * from banner order by id desc limit #{pageNo},#{pageSize}
+    </select>
+
+    <select id="findAllProBaseByPage" resultMap="BannerBaseMap" parameterType="java.lang.Integer">
+        select * from banner where type = 3 order by id desc limit #{pageNo},#{pageSize}
+    </select>
+
+    <select id="total" resultType="java.lang.Integer">
+        SELECT COUNT(1) FROM banner
+    </select>
+
+    <select id="proBaseTotal" resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM(select * from banner where type = 3)t
+    </select>
+
+    <update id="updateBannerState">
+        UPDATE banner set flag=#{flag} WHERE id=#{id}
+    </update>
+
+    <update id="delProBase" parameterType="Collection">
+        UPDATE banner SET flag = 0 WHERE id IN
+        <foreach collection="ids" item="id" open="(" separator="," close=")">
+            ${id}
+        </foreach>
+    </update>
+
+    <select id="selectAllProBasePic" resultMap="BannerBaseMap">
+        select * from banner where type = 3 AND flag = 1 order by id DESC;
+    </select>
+    <update id="updateState" >
+        UPDATE banner SET flag=#{flag} WHERE id=#{id}
+    </update>
+
+    <delete id="delByIds">
+        DELETE FROM banner WHERE id IN
+        <foreach collection="idArr" open="(" separator="," close=")" item="item">
+            #{item}
+        </foreach>
+    </delete>
+</mapper>

@@ -1,0 +1,11 @@
+-- auto Generated on 2019-03-07 14:13:24 
+-- DROP TABLE IF EXISTS member_packet; 
+CREATE TABLE memberPacket(
+	id BIGINT (1) NOT NULL AUTO_INCREMENT COMMENT 'id',
+	title VARCHAR (50) NOT NULL DEFAULT '' COMMENT '套餐名称',
+	price DECIMAL (11,2) NOT NULL DEFAULT 0 COMMENT '套餐价格',
+	monthNum INT (4) NOT NULL DEFAULT 1 COMMENT '月份期限',
+	memberid INT (2) NOT NULL DEFAULT 1 COMMENT '1:会员1   2：会员2',
+	state INT (2) NOT NULL DEFAULT 1 COMMENT '0：停用 1：启用',
+	PRIMARY KEY (id)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT 'memberPacket';

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xkygame.ssm.dao.ReplyDao">
+
+    <resultMap id="ReplyMap" type="com.xkygame.ssm.model.Reply" autoMapping="true">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="createTime" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP"/>
+        <collection property="remarkList" ofType="com.xkygame.ssm.model.Remark" autoMapping="true">
+            <id column="r_id" property="id" jdbcType="BIGINT"/>
+            <result column="r_userid" property="userid" jdbcType="BIGINT"/>
+            <result column="r_userName" property="userName" jdbcType="VARCHAR"/>
+            <result column="r_userPic" property="userPic" jdbcType="VARCHAR"/>
+            <result column="r_content" property="content" jdbcType="VARCHAR"/>
+            <result column="r_likeNum" property="likeNum" jdbcType="INTEGER"/>
+            <result column="r_createTime" property="createTime" jdbcType="TIMESTAMP"/>
+            <result column="r_updateTime" property="updateTime" jdbcType="TIMESTAMP"/>
+        </collection>
+    </resultMap>
+
+    <resultMap id="ReplyBaseMap" type="com.xkygame.ssm.model.Reply" autoMapping="true">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="createTime" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <insert id="create" parameterType="com.xkygame.ssm.model.Reply" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO reply(workID,userid,userName,userPic,parentid,parentUserName,content,likeNum,createTime,update_by,updateTime,memberid)
+        VALUES (#{workID},#{userid},#{userName},#{userPic},#{parentid},#{parentUserName},
+        #{content},#{likeNum},#{createTime},#{update_by},#{updateTime},#{memberid})
+    </insert>
+
+    <select id="findWorkReplyByPage" resultMap="ReplyMap">
+        SELECT r.*,r1.id as r_id,r1.userid as r_userid,r1.userName as r_userName,r1.userPic as r_userPic,
+        r1.content as r_content,r.memberid,
+        r1.likeNum as r_likeNum,r1.createTime as r_createTime,r1.updateTime as r_updateTime,
+        r1.workID,r1.iuserid,r1.iuserName,r1.replyID
+         from(SELECT * FROM reply where id in
+        (SELECT id FROM(select id from reply where workID=#{workid} limit #{pageNo},#{pageSize})t))r
+         LEFT join remark r1 on r.id=r1.replyID
+          order by r.likeNum desc,r.createTime desc,r1.likeNum desc,r1.createTime desc
+    </select>
+
+    <update id="updateReplyLikeNum">
+        UPDATE reply SET
+        <if test="flag == 1">likeNum = likeNum + 1</if>
+        <if test="flag == 0">likeNum = likeNum - 1</if>
+        WHERE id = #{id}
+    </update>
+
+    <select id="findReplyByID" resultMap="ReplyBaseMap">
+        SELECT * FROM reply WHERE id=#{id}
+    </select>
+
+    <select id="findMyWorkReplyByPage" resultMap="ReplyMap">
+        SELECT r.*,r1.id as r_id,r1.userid as r_userid,r1.userName as r_userName,
+        r1.userPic as r_userPic,r1.content as r_content,
+        r1.likeNum as r_likeNum,r1.createTime as r_createTime,r1.updateTime as r_updateTime,
+        r1.workID,r1.iuserid,r1.iuserName,r1.replyID
+        from(SELECT * FROM reply where id in
+        (SELECT replyID FROM(select replyID from newMsg where userid=#{id} limit #{pageNo},#{pageSize})t))r
+        LEFT join remark r1 on r.id=r1.replyID
+        order by r.likeNum desc,r.createTime desc,r1.likeNum desc,r1.createTime desc
+    </select>
+</mapper>

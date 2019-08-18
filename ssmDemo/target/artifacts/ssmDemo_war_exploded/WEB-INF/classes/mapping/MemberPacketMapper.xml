@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xkygame.ssm.dao.MemberPacketDao">
+    <!--auto generated Code-->
+    <resultMap id="BaseResultMap" type="com.xkygame.ssm.model.MemberPacket">
+        <result column="id" property="id" jdbcType="BIGINT"/>
+        <result column="title" property="title" jdbcType="VARCHAR"/>
+        <result column="price" property="price" jdbcType="DECIMAL"/>
+        <result column="monthNum" property="monthNum" jdbcType="INTEGER"/>
+        <result column="memberid" property="memberid" jdbcType="INTEGER"/>
+        <result column="state" property="state" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <!--auto generated Code-->
+    <sql id="Base_Column_List">
+        id,
+        title,
+        price,
+        monthNum,
+        memberid,
+        state
+    </sql>
+
+    <!--auto generated Code-->
+    <insert id="insert" useGeneratedKeys="true" keyProperty="memberPacket.id">
+        INSERT INTO memberPacket (
+            id,
+            title,
+            price,
+            monthNum,
+            memberid,
+            state
+        ) VALUES (
+            #{memberPacket.id,jdbcType=BIGINT},
+            #{memberPacket.title,jdbcType=VARCHAR},
+            #{memberPacket.price,jdbcType=DECIMAL},
+            #{memberPacket.monthNum,jdbcType=INTEGER},
+            #{memberPacket.memberid,jdbcType=INTEGER},
+            #{memberPacket.state,jdbcType=INTEGER}
+        )
+    </insert>
+
+    <!--auto generated Code-->
+    <insert id="insertSelective" useGeneratedKeys="true" keyProperty="memberPacket.id">
+        INSERT INTO memberPacket
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="memberPacket.id!=null"> id,</if>
+            <if test="memberPacket.title!=null"> title,</if>
+            <if test="memberPacket.price!=null"> price,</if>
+            <if test="memberPacket.monthNum!=null"> monthNum,</if>
+            <if test="memberPacket.memberid!=null"> memberid,</if>
+            <if test="memberPacket.state!=null"> state,</if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="memberPacket.id!=null">#{memberPacket.id,jdbcType=BIGINT},
+            </if>
+            <if test="memberPacket.title!=null">#{memberPacket.title,jdbcType=VARCHAR},
+            </if>
+            <if test="memberPacket.price!=null">#{memberPacket.price,jdbcType=DECIMAL},
+            </if>
+            <if test="memberPacket.monthNum!=null">#{memberPacket.monthNum,jdbcType=INTEGER},
+            </if>
+            <if test="memberPacket.memberid!=null">#{memberPacket.memberid,jdbcType=INTEGER},
+            </if>
+            <if test="memberPacket.state!=null">#{memberPacket.state,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+
+    <!--auto generated Code-->
+    <insert id="insertList">
+        INSERT INTO memberPacket (
+        <include refid="Base_Column_List"/>
+        )VALUES
+        <foreach collection="memberPackets" item="memberPacket" index="index" separator=",">
+            (
+            #{memberPacket.id,jdbcType=BIGINT},
+            #{memberPacket.title,jdbcType=VARCHAR},
+            #{memberPacket.price,jdbcType=DECIMAL},
+            #{memberPacket.monthNum,jdbcType=INTEGER},
+            #{memberPacket.memberid,jdbcType=INTEGER},
+            #{memberPacket.state,jdbcType=INTEGER}
+            )
+        </foreach>
+    </insert>
+
+    <!--auto generated Code-->
+    <update id="update">
+        UPDATE memberPacket
+        <set>
+            <if test="memberPacket.id != null"> id= #{memberPacket.id,jdbcType=BIGINT},</if>
+            <if test="memberPacket.title != null"> title= #{memberPacket.title,jdbcType=VARCHAR},</if>
+            <if test="memberPacket.price != null"> price= #{memberPacket.price,jdbcType=DECIMAL},</if>
+            <if test="memberPacket.monthNum != null"> monthNum= #{memberPacket.monthNum,jdbcType=INTEGER},</if>
+            <if test="memberPacket.memberid != null"> memberid= #{memberPacket.memberid,jdbcType=INTEGER},</if>
+            <if test="memberPacket.state != null"> state= #{memberPacket.state,jdbcType=INTEGER}</if>
+        </set>
+        WHERE id = #{memberPacket.id,jdbcType=BIGINT}
+    </update>
+
+    <select id="findByMemberid" resultType="com.xkygame.ssm.model.MemberPacket">
+        SELECT * FROM memberPacket WHERE memberid=#{memberid} AND state = 1
+        ORDER BY monthNum ASC
+    </select>
+
+    <select id="findByPage" resultType="com.xkygame.ssm.model.MemberPacket">
+      SELECT * FROM memberPacket ORDER BY id DESC
+      limit #{pageNo},#{pageSize}
+    </select>
+    <select id="total" resultType="int">
+        SELECT count(1) FROM memberPacket
+    </select>
+
+    <select id="findByID" resultType="com.xkygame.ssm.model.MemberPacket">
+        SELECT * FROM memberPacket WHERE id=#{id}
+    </select>
+
+    <update id="updateState">
+        UPDATE memberPacket SET state =#{state} WHERE id=#{id}
+    </update>
+
+    <delete id="delByIds" parameterType="Collection">
+        DELETE FROM memberPacket WHERE id IN
+        <foreach collection="idArr" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+</mapper>
+

@@ -1,0 +1,363 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xkygame.ssm.dao.WorkDao">
+
+    <resultMap id="WorksBaseMap" type="com.xkygame.ssm.model.Works" autoMapping="true">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP" />
+        <result column="disclosureTime" property="disclosureTime" jdbcType="TIMESTAMP" />
+        <result column="authorizationTime" property="authorizationTime" jdbcType="TIMESTAMP" />
+        <result column="stateTime" property="stateTime" jdbcType="TIMESTAMP" />
+        <result column="payTime" property="payTime" jdbcType="TIMESTAMP" />
+    </resultMap>
+
+    <resultMap id="worksDtoMap" type="com.xkygame.ssm.dto.WorkDto" autoMapping="true">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
+    </resultMap>
+    <resultMap id="workGroupDtoMap" type="com.xkygame.ssm.dto.WorkGroupDto" autoMapping="true">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="createTime" property="createTime" jdbcType="VARCHAR" />
+    </resultMap>
+    <resultMap id="guessWorksDtoMap" type="com.xkygame.ssm.dto.GuessWorkDto" autoMapping="true">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+    </resultMap>
+
+    <insert id="create" parameterType="com.xkygame.ssm.model.Works" useGeneratedKeys="true" keyProperty="id">
+        insert into
+        works(agentFlag,applyName,name,recordNo,cateid,cateName,disclosure,disclosureTime,authorization,authorizationTime,
+        genre,copyright,remark,type,url,
+        userid,likedNum,collectNum,reportNum,recommendFlag,shareNum,downloadNum,examine,replyNum,buyNum,
+        createTime,updateTime,state,stateTime,price,layout,resolution,size,coverPic,payType,payState,payTime,eduPackage,
+        serialNumber,timestamp,orderNo,tsaCert,tsaReason,workCert,tsaTime,fileSize,
+        fileHashCode,workLocalCert,update_by,version,monOpusFlag,returnFlag,sharePic)
+        values
+        (#{agentFlag},#{applyName},#{name},#{recordNo},#{cateid},#{cateName},#{disclosure},#{disclosureTime},#{authorization},#{authorizationTime},
+        #{genre},#{copyright},#{remark},
+        #{type},#{url},#{userid},#{likedNum},#{collectNum},#{reportNum},#{recommendFlag},
+        #{shareNum},#{downloadNum},#{examine},#{replyNum},#{buyNum},#{createTime},#{updateTime},#{state},#{stateTime},#{price},
+        #{layout},#{resolution},#{size},#{coverPic},#{payType},#{payState},#{payTime},#{eduPackage},
+        #{serialNumber},#{timestamp},#{orderNo},#{tsaCert},#{tsaReason},#{workCert},#{tsaTime},#{fileSize},#{fileHashCode},
+        #{workLocalCert},#{update_by},#{version},#{monOpusFlag},#{returnFlag},#{sharePic})
+    </insert>
+
+    <update id="update" parameterType="com.xkygame.ssm.model.Works">
+        update works set
+        agentFlag = #{agentFlag},applyName=#{applyName},
+        name = #{name},recordNo = #{recordNo},cateid = #{cateid},cateName=#{cateName},
+        disclosure=#{disclosure},
+        authorization = #{authorization},genre = #{genre},copyright = #{copyright},remark=#{remark},
+        type = #{type},url = #{url},userid = #{userid},
+        likedNum = #{likedNum},collectNum = #{collectNum},reportNum=#{reportNum},
+        recommendFlag = #{recommendFlag},
+        shareNum = #{shareNum},downloadNum = #{downloadNum},examine = #{examine},
+        replyNum = #{replyNum},buyNum=#{buyNum},createTime = #{createTime},updateTime = #{updateTime},state = #{state},
+        stateTime=#{stateTime},disclosureTime=#{disclosureTime},authorizationTime=#{authorizationTime},price=#{price},
+        layout=#{layout},resolution=#{resolution},size=#{size},coverPic=#{coverPic},payType=#{payType},
+        payState=#{payState},payTime=#{payTime},eduPackage=#{eduPackage},serialNumber=#{serialNumber},timestamp=#{timestamp},
+        orderNo=#{orderNo},tsaCert=#{tsaCert},tsaReason=#{tsaReason},workCert=#{workCert},tsaTime=#{tsaTime},
+        fileHashCode=#{fileHashCode},workLocalCert=#{workLocalCert},
+        update_by=#{update_by},version=version + 1,monOpusFlag=#{monOpusFlag},returnFlag=#{returnFlag},sharePic=#{sharePic}
+        where id=#{id} and version=#{version}
+    </update>
+
+    <select id="findByPage" resultMap="worksDtoMap">
+      SELECT a.*,b.memberid,b.certifiedFlag,b.totalFans,b.userName,b.userImg
+        FROM works a left join wxuser b on a.userid=b.id
+      <where>
+          a.state = 1 and a.examine=1
+          <if test="map != null and map.disclosure == 1"> AND a.disclosure = 1</if>
+          <if test="map.orderFlag == 5"> AND a.recommendFlag = 1</if>
+          <if test="map.orderFlag == 3"> AND a.authorization = 1 and a.downloadNum > 0</if>
+          <if test="map.cateid != 0"> AND a.cateid = #{map.cateid}</if>
+      </where>
+        <choose>
+            <when test="map.orderFlag == null or map.orderFlag == 0 or map.orderFlag == 5">
+                ORDER BY a.createTime DESC
+            </when>
+            <otherwise>
+                <if test="map.orderFlag == 1">ORDER BY a.likedNum DESC</if>
+                <if test="map.orderFlag == 3">ORDER BY a.downloadNum DESC</if>
+            </otherwise>
+        </choose>
+        limit #{pageNo},#{pageSize}
+    </select>
+
+    <select id="searchWord" resultMap="worksDtoMap">
+        SELECT * FROM works WHERE LOWER (name) like LOWER (#{key}) AND state=1 AND examine=1
+        <if test="type > -1 and type &lt; 4">AND type=#{type}</if>
+         ORDER BY likedNum DESC
+        limit #{pageNo},#{pageSize}
+    </select>
+
+    <update id="updateReplyNum">
+        UPDATE works SET replyNum = replyNum + #{num} WHERE id=#{id}
+    </update>
+
+    <select id="findUserWorks" resultMap="workGroupDtoMap">
+        SELECT id,DATE_FORMAT(createTime,'%Y年%m月%d日') as createTime,url,type,name,coverPic,cateName,
+        copyright,examine,eduPackage
+         FROM works WHERE userid=#{userid} AND state = 1 and payState = 1
+        <if test="authorFlag == 1">AND disclosure = 1 AND examine = 1</if>
+         <if test="type != -1">AND type =#{type} AND eduPackage=0 and examine = 1</if>
+         <if test="sourceType == 1">AND examine != 1</if>
+        <if test="workid > 0"> AND id != #{workid} AND examine = 1</if>
+        ORDER BY id DESC
+        limit #{pageNo},#{pageSize}
+    </select>
+
+    <select id="findByID" resultType="com.xkygame.ssm.model.Works">
+        SELECT a.*,b.userName,b.userImg,b.realName FROM works a left join wxuser b on a.userid=b.id WHERE a.id=#{id}
+    </select>
+
+    <select id="findWorkByID" resultMap="worksDtoMap">
+        SELECT a.*,b.userName,b.userImg,b.totalFans,b.memberid,b.realName
+        FROM works a left join wxuser b on a.userid=b.id
+         WHERE a.id=#{id}
+    </select>
+
+    <select id="findAllSpecial" resultMap="worksDtoMap">
+        SELECT * FROM works WHERE state = 1 and recommendFlag = 1 AND examine=1
+        <if test="cateid > 0"> AND cateid=#{cateid}</if>
+    </select>
+
+    <select id="findAllByPage" resultMap="WorksBaseMap">
+        SELECT a.*,b.userName,b.userImg FROM works a left join wxuser b on a.userid=b.id
+        <where>
+            a.payState = 1
+            <if test="map.searchVal != null and map.searchVal != ''">
+                AND LOWER (concat(name,b.userName,if(b.realName='',b.company,b.realName))) LIKE LOWER (#{map.searchVal})
+            </if>
+            <if test="map.examine != -2">AND a.examine = #{map.examine}</if>
+            <if test="map.userid > 0">
+                AND a.userid=#{map.userid} AND a.disclosure=1 AND a.examine=1 AND a.state = 1
+                AND a.monOpusFlag = 0
+            </if>
+            <if test="map.cateid != 0">AND a.cateid=#{map.cateid}</if>
+        </where>
+        ORDER BY a.id DESC
+        limit #{pageNo},#{pageSize}
+    </select>
+
+    <select id="total" resultType="java.lang.Integer">
+        SELECT count(1) FROM (
+            SELECT a.id FROM works a left join wxuser b on a.userid=b.id
+            <where>
+                a.payState = 1
+                <if test="map.searchVal != null and map.searchVal != ''">
+                    AND LOWER (concat(name,b.userName,if(b.realName='',b.company,b.realName))) LIKE LOWER (#{map.searchVal})
+                </if>
+                <if test="map.examine != -2">AND a.examine = #{map.examine}</if>
+                <if test="map.userid > 0">
+                    AND a.userid=#{map.userid} AND a.disclosure=1 AND a.examine=1 AND a.state = 1
+                    AND a.monOpusFlag = 0
+                </if>
+                <if test="map.cateid != 0">AND a.cateid=#{map.cateid}</if>
+            </where>
+            ORDER BY a.id DESC
+        )t
+    </select>
+
+    <update id="updateExamine">
+        UPDATE works SET examine=#{examine},updateTime=#{updateTime},update_by=#{userName} WHERE id=#{id}
+    </update>
+
+    <update id="updateRecommendFlag">
+        UPDATE works SET recommendFlag=#{recommendFlag} WHERE id=#{id}
+    </update>
+    <update id="updateState">
+        UPDATE works SET state=#{state},stateTime=#{stateTime} WHERE id=#{id}
+    </update>
+
+    <select id="countTotalPublicNum" resultType="java.math.BigDecimal">
+        select count(id) FROM works where disclosure=1 and examine=1
+    </select>
+    <select id="countCurPublicNum" resultType="java.math.BigDecimal">
+        select count(id) FROM works where disclosure=1 and examine=1
+        and DATE_FORMAT(disclosureTime,'%Y-%m-%d')=DATE_FORMAT(date_sub(curdate(), interval 0 day),'%Y-%m-%d')
+    </select>
+    <select id="countTotalAuthNum" resultType="java.math.BigDecimal">
+      select count(id) FROM works where authorization=1 and examine=1
+    </select>
+    <select id="countCurAuthNum" resultType="java.math.BigDecimal">
+        select count(id) FROM works where authorization=1 and examine=1
+        and DATE_FORMAT(authorizationTime,'%Y-%m-%d')=DATE_FORMAT(date_sub(curdate(), interval 0 day),'%Y-%m-%d')
+    </select>
+    <select id="countTotalWorkNum" resultType="java.math.BigDecimal">
+        select count(id) FROM works where examine=1
+    </select>
+    <select id="countCurWorkNum" resultType="java.math.BigDecimal">
+        select count(id) FROM works where examine=1
+        and DATE_FORMAT(createTime,'%Y-%m-%d')=DATE_FORMAT(date_sub(curdate(), interval 0 day),'%Y-%m-%d')
+    </select>
+
+    <select id="countWorksByDay" resultType="com.xkygame.ssm.dto.CountDataDto">
+        select v.dateTime,ifnull(b.amount,0) as totalNum from past_30_day_view v
+        left join
+           (select id, DATE_FORMAT(createTime,'%Y-%m-%d') as dateTime ,count(id) as amount
+        from works
+        where DATE_FORMAT(createTime,'%Y-%m-%d')>DATE_FORMAT(date_sub(curdate(), interval 30 day),'%Y-%m-%d') AND examine=1
+        <if test="map.cateid != null and map.cateid > 0">AND cateid = #{map.cateid}</if>
+        <if test="map.searchVal != null and map.searchVal != ''">AND LOWER (name) like LOWER (#{map.searchVal})</if>
+        GROUP BY dateTime ORDER BY createTime ASC)b
+        ON v.dateTime=b.dateTime GROUP BY v.dateTime
+    </select>
+    <select id="countWorksByMonth" resultType="com.xkygame.ssm.dto.CountDataDto">
+        select v.dateTime,ifnull(b.amount,0) as totalNum from past_12_month_view v
+        left join
+        (select id, DATE_FORMAT(createTime,'%Y-%m') as dateTime ,count(id) as amount
+        from works
+        where DATE_FORMAT(createTime,'%Y-%m')>DATE_FORMAT(date_sub(curdate(), interval 12 month),'%Y-%m') AND examine=1
+        <if test="map.cateid != null and map.cateid > 0">AND cateid = #{map.cateid}</if>
+        <if test="map.searchVal != null and map.searchVal != ''">AND LOWER (searchVal) like LOWER (#{map.cateid})</if>
+        GROUP BY dateTime ORDER BY createTime ASC)b
+        ON v.dateTime=b.dateTime GROUP BY v.dateTime
+    </select>
+    <select id="countWorksByYear" resultType="com.xkygame.ssm.dto.CountDataDto">
+        select v.dateTime,ifnull(b.amount,0) as totalNum from past_5_year_view v
+        left join
+        (select id, DATE_FORMAT(createTime,'%Y') as dateTime ,count(id) as amount
+        from works
+        where DATE_FORMAT(createTime,'%Y')>DATE_FORMAT(date_sub(curdate(), interval 5 year),'%Y') AND examine=1
+        <if test="map.cateid != null and map.cateid > 0">AND cateid = #{map.cateid}</if>
+        <if test="map.searchVal != null and map.searchVal != ''">AND LOWER (searchVal) like LOWER (#{map.cateid})</if>
+        GROUP BY dateTime ORDER BY createTime ASC)b
+        ON v.dateTime=b.dateTime GROUP BY v.dateTime
+    </select>
+
+    <update id="updateCateName">
+        UPDATE works SET cateName=#{cateName} WHERE cateid=#{cateid}
+    </update>
+
+    <select id="findGuessWorkByPage" resultMap="guessWorksDtoMap">
+          SELECT * FROM works WHERE cateid=#{map.cateid} AND state = 1 AND disclosure = 1 AND examine=1
+          ORDER BY createTime DESC
+          limit #{pageNo},#{pageSize}
+    </select>
+
+    <update id="addShareNum">
+        UPDATE works SET shareNum = shareNum + 1 WHERE id=#{id}
+    </update>
+
+    <update id="addDownloadNum">
+        UPDATE works SET downloadNum = downloadNum + 1 WHERE id=#{id}
+    </update>
+
+    <select id="findAllShopProsByPage" resultType="com.xkygame.ssm.dto.ShopProDto">
+        SELECT w.*,w1.userName FROM works w LEFT join wxuser w1 on w.userid=w1.id
+        WHERE w.state = 1 and w.examine=1 AND disclosure = 1 AND authorization = 1
+        <if test="type != -1">and w.type=#{type}</if>
+        <if test="key != null and key !=''">AND LOWER (name) LIKE LOWER (#{key})</if>
+        order BY w.downloadNum DESC
+        limit #{pageNo},#{pageSize}
+    </select>
+
+    <select id="findShopProByID" resultType="com.xkygame.ssm.dto.ShopProDto">
+        SELECT ws.*,w.realName as userName FROM works ws LEFT JOIN wxuser w on ws.userid=w.id WHERE ws.id=#{id}
+    </select>
+
+    <select id="getEduPackage" resultType="com.xkygame.ssm.dto.EduPackageDto">
+        SELECT * FROM works WHERE userid=#{id} AND eduPackage=1 AND state =1 AND examine=1
+        ORDER BY id DESC limit #{pageNo},#{pageSize}
+    </select>
+
+    <select id="getMyCollectWork" resultMap="workGroupDtoMap">
+        SELECT w.id,DATE_FORMAT(c.createTime,'%Y年%m月%d日') as createTime,w.url,w.type,w.name,w.coverPic
+        FROM Collections c LEFT JOIN works w on w.id=c.workid WHERE c.userid=#{id}
+        AND c.state =1 AND w.examine=1 AND w.state=1
+        ORDER BY c.id DESC limit #{pageNo},#{pageSize}
+    </select>
+
+    <select id="findWorkByRecordNo" resultType="com.xkygame.ssm.dto.WorkDto">
+        SELECT a.*,b.userName,b.userImg,b.totalFans,b.memberid,b.realName
+        FROM works a left join wxuser b on a.userid=b.id
+        WHERE recordNo=#{recordNo}
+    </select>
+
+    <update id="updateDisclosure">
+        update works set disclosure=#{disclosure},disclosureTime=#{date}
+        <if test="disclosure == 0">,authorization=0</if>
+         where id=#{id}
+    </update>
+
+    <update id="updateAuthorization">
+        update works set authorization=#{authorization},authorizationTime=#{date}
+         <if test="authorization == 1">,price=#{price}</if>
+         where id=#{id}
+    </update>
+
+    <update id="updatePrice">
+        UPDATE works SET price =#{price} WHERE id=#{id}
+    </update>
+
+    <select id="findBySerialNo" resultType="com.xkygame.ssm.model.Works">
+      SELECT * FROM works WHERE serialNumber=#{serialNumber}
+    </select>
+
+    <update id="updateTsaCert">
+        UPDATE works SET tsaCert=#{url},version = version + 1 WHERE id=#{id} and version=#{version}
+    </update>
+    <select id="findMyWorkName" resultType="java.lang.String">
+        select name from works where userid = #{userid} and state = 1 and examine=1
+        order by likedNum desc
+    </select>
+    <select id="countTotalWork" resultType="java.math.BigDecimal">
+        SELECT count(1) FROM works WHERE examine = 1 and state = 1 AND payState = 1
+    </select>
+    <select id="countCurWork" resultType="java.math.BigDecimal">
+        SELECT count(1) FROM works WHERE examine = 1 and state = 1 AND payState = 1
+        AND date_format(createTime,'%y-%m-%d')=date_format(DATE_SUB(curdate(), INTERVAL 0 DAY),'%y-%m-%d')
+    </select>
+    <select id="findMyWork" resultType="com.xkygame.ssm.dto.WorkUserDto">
+        SELECT id,name,type,coverPic FROM works WHERE disclosure = 1 AND state = 1
+         ORDER BY likedNum DESC
+    </select>
+
+    <delete id="delByIds" parameterType="Collection">
+      DELETE FROM works WHERE id IN
+      <foreach collection="idArr" item="item" open="(" separator="," close=")">
+          #{item}
+      </foreach>
+    </delete>
+    <update id="updateMagOpusFlag">
+        update works SET monOpusFlag = #{flag} WHERE id=#{id}
+    </update>
+    <select id="findMagOpus" resultType="com.xkygame.ssm.dto.WorkDto">
+      SELECT * from works WHERE userid=#{userid} and monOpusFlag=1 and examine=1 AND disclosure=1
+      ORDER BY likedNum DESC
+    </select>
+    <select id="findByIdArr" resultMap="worksDtoMap">
+        SELECT * FROM works WHERE id IN
+        <foreach collection="idArr" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+    <update id="updateReturnFlag">
+      UPDATE works SET returnFlag =1 WHERE id=#{id}
+    </update>
+    <update id="updateEduPacket">
+        UPDATE works SET eduPackage = #{eduPackage} WHERE id=#{id}
+    </update>
+    <select id="findByHashCode" resultType="com.xkygame.ssm.model.Works">
+        SELECT * FROM works WHERE fileHashCode=#{fileHashCode} AND userid=#{userid} AND state=1 AND examine >= 0 AND payState >0
+    </select>
+    <select id="countUserWorks" resultType="int">
+        SELECT count(1) FROM works WHERE userid=#{userid} AND examine = 1 AND state = 1
+    </select>
+    <update id="updateTsaInfo">
+        UPDATE works SET serialNumber = #{serialNumber},timestamp=#{timestamp},tsaTime=#{time}
+        WHERE id=#{id}
+    </update>
+
+    <update id="updateTsaReasion">
+        UPDATE works SET tsaReason = #{tsaReason} WHERE id=#{id}
+    </update>
+    <update id="updateSharePic">
+        UPDATE works SET sharePic=#{sharePic} WHERE id=#{id}
+    </update>
+    <update id="updateWorkCert">
+        UPDATE works SET workCert=#{workCert},workLocalCert=#{workLocalCert} WHERE id=#{id}
+    </update>
+
+</mapper>
